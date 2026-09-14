@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b2b40" />
+    <meta name="description" content="Pintasan pantas Fail Disiplin 2026 SMK Taman Medan." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="icon" type="image/svg+xml" href="icon.svg" />
+    <title>Fail Disiplin 2026</title>
+    <style>
+      :root {
+        --ink: #0b2b40;
+        --ink-soft: #27485a;
+        --teal: #087f8c;
+        --aqua: #dff5f4;
+        --gold: #f5c45d;
+        --paper: #f2f7f8;
+        --card: #ffffff;
+        --line: #d8e4e7;
+        --muted: #607584;
+        --shadow: 0 10px 28px rgba(15, 52, 71, .09);
+      }
+      * { box-sizing: border-box; }
+      html { background: var(--paper); }
+      body { margin: 0; min-width: 320px; min-height: 100vh; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .shell { width: min(100%, 1120px); margin: 0 auto; padding: 10px 12px calc(24px + env(safe-area-inset-bottom)); }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 2px 10px; }
+      .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+      .crest { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border-radius: 11px; background: var(--ink); color: var(--gold); font-size: 19px; box-shadow: 0 5px 11px rgba(11, 43, 64, .14); }
+      .brand p, .brand h1 { margin: 0; }
+      .brand p { color: var(--muted); font-size: .66rem; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
+      .brand h1 { margin-top: 1px; color: var(--ink); font-size: .98rem; line-height: 1.15; }
+      .install { display: none; align-items: center; gap: 6px; border: 1px solid #b9dde0; border-radius: 999px; min-height: 34px; padding: 0 10px; color: var(--teal); background: #fff; font-size: .78rem; font-weight: 800; white-space: nowrap; }
+      .install.visible { display: flex; }
+      .quickbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; padding: 10px 12px; border: 1px solid #c9e4e6; border-radius: 16px; color: #fff; background: linear-gradient(105deg, #0b2b40, #0b6874); }
+      .quickbar p, .quickbar h2 { margin: 0; }
+      .quickbar p { color: #b9e8ea; font-size: .67rem; font-weight: 800; letter-spacing: .075em; text-transform: uppercase; }
+      .quickbar h2 { margin-top: 2px; font-size: 1rem; line-height: 1.15; }
+      .quick-drive { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; min-height: 34px; border-radius: 10px; padding: 0 10px; color: var(--ink); background: var(--gold); text-decoration: none; font-size: .78rem; font-weight: 850; }
+      .quick-drive:active, .folder-open:active, .file-open:active { transform: scale(.98); }
+      .toolbar { position: relative; z-index: 1; display: grid; gap: 8px; margin: 10px 0 9px; padding: 0; }
+      .search { display: flex; align-items: center; gap: 9px; height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 0 12px; background: #fff; box-shadow: 0 3px 10px rgba(15,52,71,.03); }
+      .search span { color: var(--teal); font-size: 1.15rem; }
+      .search input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 1rem; }
+      .search input::placeholder { color: #8a9da8; }
+      .filters { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 1px; scrollbar-width: none; }
+      .filters::-webkit-scrollbar { display: none; }
+      .chip { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px; color: var(--ink-soft); background: #fff; font-size: .75rem; font-weight: 780; }
+      .chip[aria-pressed="true"] { border-color: var(--ink); color: #fff; background: var(--ink); }
+      .summary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 2px 2px 8px; }
+      .summary h3 { margin: 0; font-size: .88rem; }
+      .summary p { margin: 0; color: var(--muted); font-size: .72rem; }
+      .grid { display: grid; gap: 8px; grid-template-columns: 1fr; }
+      .folder { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--card); box-shadow: 0 2px 8px rgba(15,52,71,.03); }
+      .folder-main { display: block; min-width: 0; padding-right: 48px; color: inherit; text-decoration: none; }
+      .folder-main:hover { background: #f7fbfc; }
+      .folder-head { display: flex; gap: 10px; align-items: center; min-height: 58px; padding: 11px 12px; }
+      .folder-icon { display: grid; place-items: center; width: 33px; height: 33px; flex: 0 0 33px; border-radius: 10px; background: var(--aqua); font-size: 17px; }
+      .folder-copy { min-width: 0; flex: 1; }
+      .folder-copy h4 { margin: 0; font-size: .9rem; line-height: 1.22; }
+      .folder-more { position: absolute; top: 7px; right: 7px; }
+      .folder-more summary { display: grid; place-items: center; width: 42px; height: 42px; list-style: none; border-radius: 10px; color: var(--teal); background: #edfafa; cursor: pointer; }
+      .folder-more summary::-webkit-details-marker { display: none; }
+      .folder-more summary::after { content: "⌄"; font-size: 1.2rem; font-weight: 850; }
+      .folder-more[open] { position: static; display: block; border-top: 1px solid var(--line); }
+      .folder-more[open] summary { position: absolute; top: 7px; right: 7px; }
+      .folder-more[open] summary::after { content: "⌃"; }
+      .files { display: grid; gap: 7px; padding: 10px; }
+      .file-open { display: flex; align-items: center; gap: 9px; border-radius: 10px; padding: 10px; color: var(--ink-soft); text-decoration: none; font-size: .8rem; font-weight: 720; line-height: 1.28; }
+      .file-open:hover { background: #f4f9fa; }
+      .file-type { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 27px; border-radius: 8px; background: #f1f6f7; color: var(--teal); font-size: .78rem; font-weight: 900; }
+      .empty { display: none; border: 1px dashed #b7c9cf; border-radius: 16px; padding: 28px; color: var(--muted); text-align: center; background: #fff; }
+      .note { margin: 14px 2px 0; color: var(--muted); font-size: .71rem; line-height: 1.45; text-align: center; }
+      .note strong { color: var(--ink-soft); }
+      @media (min-width: 700px) { .shell { padding: 24px 16px 32px; } .quickbar { min-height: 72px; padding: 13px 16px; } .quickbar h2 { font-size: 1.16rem; } .toolbar { grid-template-columns: minmax(320px, 1fr) auto; align-items: center; margin-top: 14px; } .filters { max-width: 520px; } .grid { gap: 10px; grid-template-columns: 1fr; } .folder-head { min-height: 62px; padding: 12px 15px; } .folder-icon { width: 38px; height: 38px; flex-basis: 38px; } .folder-copy h4 { font-size: .96rem; } }
+      @media (prefers-reduced-motion: no-preference) { .folder, .chip, .folder-main, .file-open { transition: transform .16s ease, box-shadow .16s ease, background .16s ease; } .folder:hover { transform: translateY(-1px); box-shadow: var(--shadow); } }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="crest" aria-hidden="true">▤</div>
+          <div><p>SMK Taman Medan</p><h1>Fail Disiplin 2026</h1></div>
+        </div>
+        <button id="installButton" class="install" type="button" aria-label="Pasang aplikasi"><span>⊞</span> Pasang</button>
+      </header>
+
+      <section class="quickbar" aria-labelledby="quickTitle">
+        <div><p>Pintasan Google Drive</p><h2 id="quickTitle">Akses Fail Disiplin dengan pantas</h2></div>
+        <a class="quick-drive" href="https://drive.google.com/drive/folders/1abY0Hpimq4fRokCyNUPHaxmzi-6ZF1mT" target="_blank" rel="noopener">Drive ↗</a>
+      </section>
+
+      <section id="pintasan" class="toolbar" aria-label="Cari dan tapis pintasan">
+        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Cari fail atau folder…" autocomplete="off" /></label>
+        <div class="filters" role="group" aria-label="Kategori fail">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">Semua</button>
+          <button class="chip" type="button" data-filter="surat" aria-pressed="false">Surat</button>
+          <button class="chip" type="button" data-filter="rekod" aria-pressed="false">Rekod & Kes</button>
+          <button class="chip" type="button" data-filter="pengurusan" aria-pressed="false">Pengurusan</button>
+        </div>
+      </section>
+
+      <div class="summary"><h3>Pintasan utama</h3><p id="resultCount" aria-live="polite"></p></div>
+      <section id="folderGrid" class="grid" aria-label="Senarai pintasan fail"></section>
+      <p id="emptyState" class="empty">Tiada pintasan sepadan. Cuba kata kunci lain.</p>
+      <p class="note"><strong>Kemaskini 14 September 2026.</strong> Pautan membuka Google Drive dalam tab baharu dan memerlukan sambungan internet.</p>
+    </main>
+
+    <script>
+      const folderGroups = [
+        { category: 'surat', icon: '✉', title: 'Surat', description: 'Surat tindakan, lantikan dan rujukan', url: 'https://drive.google.com/drive/folders/1OkoAZZFlN1Go21RTM6JLIgY74t68Gr_i', files: [
+          ['SURAT BUANG SEKOLAH', 'https://drive.google.com/drive/folders/1vrMbCOZMxtys9qsAWiyc6yxRxqNWSBLl', 'folder'],
+          ['SURAT GANTUNG', 'https://drive.google.com/drive/folders/1w37hZvyYuNv1hHOYNqVAx0afKrQpunzC', 'folder'],
+          ['SURAT MAKLUMAN KEPADA IBU BAPA', 'https://drive.google.com/drive/folders/1aWZZsRwvtR0ZyeZqBrY_pfUdXAORGV4c', 'folder'],
+          ['SURAT AMARAN DALAMAN', 'https://drive.google.com/drive/folders/1ABmsKugqE081xB5sQpzUfUNJh-glpJrY', 'folder'],
+          ['SURAT KUASA MEROTAN', 'https://drive.google.com/drive/folders/10HSkYCfsSL3d-EIxIzDrldYHsCQEvs0Q', 'folder'],
+          ['SURAT LANTIKAN DISIPLIN', 'https://drive.google.com/drive/folders/1SaKwIKJiyIpN4lD7UJMSz5OXKOma_dso', 'folder'],
+          ['SURAT PANGGILAN MESYUARAT', 'https://drive.google.com/drive/folders/1xsTdKhannZEx9u0qZa40kYyltzlcwCNn', 'folder'],
+          ['SURAT PERTUDUHAN KES', 'https://drive.google.com/drive/folders/1HH_3L7MSciCUDKsDsFn2S09akfoGP3hR', 'folder'],
+          ['SURAT PERTUDUHAN GANTUNG', 'https://drive.google.com/drive/folders/1Iz1BsrB-jGYo4hPM5y4jdD7s55TpfEGR', 'folder']
+        ]},
+        { category: 'rekod', icon: '☷', title: 'Minit Kes', description: 'Rekod minit kes murid', url: 'https://drive.google.com/drive/folders/1LIDIuG9k-iwhosbKakJ6kxLuCGJimv7C', files: [
+          ['01 minit kes Adam Haziq 5I dan Nabil 5J', 'https://docs.google.com/document/d/1i4UsXUDEw-4dyG57VIj3wDmzg3OIUg_V/edit?usp=drivesdk', 'DOC'],
+          ['02 minit kes Wafiq 3G', 'https://docs.google.com/document/d/1h0j6aOtZ33QMOpGtwTprHsKDd2ffNhPd/edit?usp=drivesdk', 'DOC'],
+          ['03 minit kes 3 Ikhlas', 'https://docs.google.com/document/d/1X4p5EfKQ-r1KG2d0fWxFJ-VqqKrtl6JY/edit?usp=drivesdk', 'DOC'],
+          ['04 minit kes Adam Riezkie 4 Ikhlas', 'https://docs.google.com/document/d/1E9qdM0RdIxhrIAARgO5B0BzG_EwLDUSv/edit?usp=drivesdk', 'DOC'],
+          ['05 minit kes Ammar Rifqi & Iman Umayr', 'https://docs.google.com/document/d/1wRKXwhKtnKPwloIWQrRIG9AS7hem8kkb/edit?usp=drivesdk', 'DOC']
+        ]},
+        { category: 'pengurusan', icon: '☑', title: 'Minit Mesyuarat Lembaga', description: 'Minit dan maklum balas mesyuarat', url: 'https://drive.google.com/drive/folders/1mBqJuze_teT0aNsgqc4k5GKa_qxZ8bTe', files: [
+          ['Minit Mesyuarat Disiplin & Pengawas (PDF)', 'https://drive.google.com/file/d/1pjEYhQhkr9JVv2YRcdxrF2ZTIVmLcTix/view?usp=drivesdk', 'PDF'],
+          ['Minit Mesyuarat Disiplin & Pengawas (DOCX)', 'https://docs.google.com/document/d/17hvURWQkPS5W3NtV1vTy52FAM8Eafe-H/edit?usp=drivesdk', 'DOC'],
+          ['Maklum Balas Minit Mesyuarat (PDF)', 'https://drive.google.com/file/d/1E1k6vwjaU5ewbqZjtuXo8-u-yFgRqDJ_/view?usp=drivesdk', 'PDF'],
+          ['Maklum Balas Minit Mesyuarat (DOCX)', 'https://docs.google.com/document/d/1JeswV8Uf82ZYdrmpMnh62S5uaVur4l2U/edit?usp=drivesdk', 'DOC']
+        ]},
+        { category: 'pengurusan', icon: '◷', title: 'Jadual Bertugas Pagar', description: 'Jadual bertugas pagar 2026', url: 'https://drive.google.com/drive/folders/1SSql-D0ptpXxmU-vOcOLYZ_-3vpwwiEb', files: [
+          ['Jadual Bertugas Pagar Bil. 4 (PDF)', 'https://drive.google.com/file/d/1RQ320K8hgmvZJCTYbp6FYkksl9vE2C1B/view?usp=drivesdk', 'PDF'],
+          ['Jadual Bertugas Pagar Bil. 4 (DOCX)', 'https://docs.google.com/document/d/1Z2cupq44005VDtW4KtdXl5BzFbzx756W/edit?usp=drivesdk', 'DOC'],
+          ['Jadual Bertugas Pagar Bil. 3', 'https://docs.google.com/document/d/1lpwnU-658ih1PTQk0tc-CBQP3COcZDMJ/edit?usp=drivesdk', 'DOC'],
+          ['Jadual Bertugas Pagar Bil. 2', 'https://docs.google.com/document/d/1dtwBRMhogfZK8jhTu4kPCcMn6i-Zk1ZW/edit?usp=drivesdk', 'DOC'],
+          ['Jadual Bertugas Pagar Bil. 1 (PDF)', 'https://drive.google.com/file/d/12flLa0dJV1hYmaSWUDSZ0bTzMYhKbiWp/view?usp=drivesdk', 'PDF']
+        ]},
+        { category: 'rekod', icon: '▥', title: 'Laporan Kes Disiplin', description: 'Statistik dan analisis kes', url: 'https://drive.google.com/drive/folders/1NJ0e2kZ1KEpo2vgDIVWJtOmx6UbbVviQ', files: [
+          ['Statistik Salah Laku 2024–Ogos 2026', 'https://docs.google.com/spreadsheets/d/1oDIETGFhH9ptXAS-ej8mkUiGnenEGLEY/edit?usp=drivesdk', 'XLS'],
+          ['Perbandingan Kes 2025 dan 2026', 'https://docs.google.com/presentation/d/1rGlsSMNNa55R6Rd9W2xpXsnr0NtkP-Ty/edit?usp=drivesdk', 'PPT'],
+          ['Analisis Disiplin Jan–April 2026 (PDF)', 'https://drive.google.com/file/d/1J2r1DsHrGYB3fjMd1-U2GUfa_L3g8piR/view?usp=drivesdk', 'PDF'],
+          ['Bulan Januari hingga April 2026', 'https://drive.google.com/drive/folders/1ZMUWc95Wvu0lxTheI4nWFFT6C4u0rH7R', 'folder']
+        ]},
+        { category: 'surat', icon: '!', title: 'Rekod Surat Amaran', description: 'Rekod surat amaran dalaman', url: 'https://drive.google.com/drive/folders/1IJHXRgGSi4LKCzNW66RK7Xt5laA741cH', files: [
+          ['REKOD SURAT AMARAN DALAMAN', 'https://docs.google.com/spreadsheets/d/15me2H71-Lx2efT8KDgFUSfkGCl1PB-n8Bu-fSXBq9G8/edit?usp=drivesdk', 'XLS']
+        ]},
+        { category: 'rekod', icon: '⌑', title: 'Borang Rujukan UBK', description: 'Borang rujukan bimbingan & kaunseling', url: 'https://drive.google.com/drive/folders/1JAZnd1QR8G0psI8y2XzWCqxboINqkv0Z', files: [
+          ['Borang Rujukan Perkhidmatan Bimbingan dan Kaunseling', 'https://docs.google.com/document/d/1jYajk5UcBp7C1Hn61cZhFP6jgtUlNSLB/edit?usp=drivesdk', 'DOC'],
+          ['Borang Rujukan UBK — Sesi Pagi', 'https://drive.google.com/drive/folders/1buSTSFG91or_gE-gVZ_tHvsp6tmWbFOc', 'folder']
+        ]},
+        { category: 'rekod', icon: '≡', title: 'Senarai Kes 2026', description: 'Senarai kes mengikut sesi', url: 'https://drive.google.com/drive/folders/1GSbgrQnbiorBbBpQagCjT6jj6gCX1Fkf', files: [
+          ['Sesi Pagi — Senarai Kes Salah Laku 2026', 'https://docs.google.com/spreadsheets/d/1rFvIjOcl8eFxv9zNKcfSFb-trqmPl7mF/edit?usp=drivesdk', 'XLS'],
+          ['Sesi Pagi — Senarai Nama Vape', 'https://docs.google.com/spreadsheets/d/14CIusSR1rB9tSxlPl8ubHnnQMTrkLn-9/edit?usp=drivesdk', 'XLS'],
+          ['Sesi Petang', 'https://drive.google.com/drive/folders/1lyflPDF9d7w-5K359-ufkoc8EHk_SWvu', 'folder']
+        ]},
+        { category: 'rekod', icon: '◴', title: 'Rekod Murid Lewat', description: 'Rekod kehadiran dan intervensi lewat', url: 'https://drive.google.com/drive/folders/1_peOUPYsDMNp1jqXAKMdHU_nEFANMGL_', files: [
+          ['Tindakan Intervensi Murid Lewat 2026', 'https://docs.google.com/spreadsheets/d/1JCtTIblOZ8LyvKngUS7kyfXzRsvzvVFa/edit?usp=drivesdk', 'XLS'],
+          ['2026 Sesi Pagi Rekod Murid Lewat', 'https://docs.google.com/spreadsheets/d/1mYWvMZxg7LjjH1jsOEhk0jwOsmNgU8Na/edit?usp=drivesdk', 'XLS'],
+          ['Sesi Petang', 'https://drive.google.com/drive/folders/1gFzrFEMEZfZ1b7tCF8_gFN2CRjihQAwh', 'folder']
+        ]},
+        { category: 'pengurusan', icon: '⌂', title: 'Jom Ke Sekolah', description: 'Dokumen program Jom Ke Sekolah', url: 'https://drive.google.com/drive/folders/1YQEyDyZ5N6pXbaKufoD1cQVCOJkKP7Vh', files: [
+          ['Pelan Lantai JKS AGP 2MK', 'https://docs.google.com/document/d/1Lg7kXl5RqpJOE5lZmeP7VOOcyy5im9Nr/edit?usp=drivesdk', 'DOC']
+        ]}
+      ];
+
+      const grid = document.querySelector('#folderGrid');
+      const search = document.querySelector('#search');
+      const count = document.querySelector('#resultCount');
+      const empty = document.querySelector('#emptyState');
+      let selectedFilter = 'all';
+
+      const escapeHTML = (value) => value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
+      const matches = (group, query) => [group.title, group.description, ...group.files.map((file) => file[0])].join(' ').toLocaleLowerCase('ms').includes(query);
+
+      function render() {
+        const query = search.value.trim().toLocaleLowerCase('ms');
+        const visible = folderGroups.filter((group) => (selectedFilter === 'all' || group.category === selectedFilter) && (!query || matches(group, query)));
+        grid.innerHTML = visible.map((group) => {
+          const list = group.files.map(([name, url, type]) => `<a class="file-open" href="${url}" target="_blank" rel="noopener"><span class="file-type">${type === 'folder' ? '↗' : type}</span><span>${escapeHTML(name)}</span></a>`).join('');
+          return `<article class="folder"><a class="folder-main" href="${group.url}" target="_blank" rel="noopener" aria-label="Folder ${escapeHTML(group.title)}"><div class="folder-head"><div class="folder-icon" aria-hidden="true">${group.icon}</div><div class="folder-copy"><h4>${escapeHTML(group.title)}</h4></div></div></a><details class="folder-more"><summary aria-label="Lihat ${group.files.length} pintasan dalam ${escapeHTML(group.title)}"></summary><div class="files">${list}</div></details></article>`;
+        }).join('');
+        count.textContent = `${visible.length} daripada ${folderGroups.length} kategori`;
+        empty.style.display = visible.length ? 'none' : 'block';
+      }
+
+      search.addEventListener('input', render);
+      document.querySelectorAll('.chip').forEach((button) => button.addEventListener('click', () => {
+        selectedFilter = button.dataset.filter;
+        document.querySelectorAll('.chip').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        render();
+      }));
+
+      let deferredPrompt;
+      const installButton = document.querySelector('#installButton');
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+        installButton.classList.add('visible');
+      });
+      installButton.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installButton.classList.remove('visible');
+      });
+      window.addEventListener('appinstalled', () => installButton.classList.remove('visible'));
+      if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+      render();
+    </script>
+  </body>
+</html>

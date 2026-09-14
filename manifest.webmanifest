@@ -1,0 +1,17 @@
+{
+  "name": "Fail Disiplin 2026",
+  "short_name": "Fail Disiplin",
+  "description": "Pintasan pantas dokumen Lembaga Disiplin 2026.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef4f7",
+  "theme_color": "#0b2b40",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

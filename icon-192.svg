@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="Fail Disiplin">
+  <rect width="192" height="192" rx="42" fill="#0b2b40"/>
+  <path d="M55 44c0-6 5-11 11-11h45l27 27v76c0 6-5 11-11 11H66c-6 0-11-5-11-11V44Z" fill="#f5c45d"/>
+  <path d="M111 33v27h27" fill="#d89d2c"/>
+  <path d="M77 87h40M77 105h40M77 123h26" stroke="#0b2b40" stroke-width="8" stroke-linecap="round"/>
+</svg>
