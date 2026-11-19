@@ -4,7 +4,8 @@ Kandungan
 - index.html: aplikasi (log masuk, daftar akaun, senarai fail Drive)
 - manifest.json: maklumat pemasangan aplikasi
 - sw.js: cache app-shell supaya aplikasi boleh dibuka semula tanpa internet selepas muat pertama
-- icons/: ikon aplikasi (48, 72, 96, 144, 192, 512)
+- icons/: ikon aplikasi (48, 72, 96, 144, 192, 512, maskable 512, apple-touch-icon 180)
+- generate_icons.js: penjana ikon (node generate_icons.js) jika mahu ubah reka bentuk ikon
 - vercel.json: tetapan header supaya sw.js dan manifest.json sentiasa disemak semula
 - Code.gs: skrip Google Apps Script untuk akaun dan senarai pintasan
 

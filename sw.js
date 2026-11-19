@@ -1,7 +1,8 @@
-const CACHE_NAME = 'fail-disiplin-v12';
+const CACHE_NAME = 'fail-disiplin-v13';
 const APP_SHELL = [
   './', './index.html', './manifest.json',
-  './icons/launchericon-192x192.png', './icons/launchericon-512x512.png'
+  './icons/launchericon-192x192.png', './icons/launchericon-512x512.png',
+  './icons/maskable-512x512.png', './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {
