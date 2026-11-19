@@ -542,11 +542,11 @@
     try { const c = JSON.parse(LS.get('fd_cache') || 'null'); if (c && Array.isArray(c.kumpulan)) { state.kumpulan = c.kumpulan; state.kemaskini = c.kemaskini || ''; return true; } } catch (e) {}
     return false;
   }
-  async function muatSenarai(segar) {
+  async function muatSenarai() {
     if (state.memuat) return; state.memuat = true;
     if (!state.kumpulan.length) paparRangka();
     try {
-      const res = await api('pintasan', { token: LS.get('fd_token'), segar: !!segar });
+      const res = await api('pintasan', { token: LS.get('fd_token') });
       if (res.tamat) return logKeluar('Sesi tamat. Log masuk semula.');
       if (!res.ok) throw new Error('RESPONS');
       state.kumpulan = res.kumpulan || []; state.kemaskini = res.kemaskini || '';
@@ -611,9 +611,9 @@
     if (!hasil.length) {
       kosong.hidden = false;
       if (!jumlah && state.luarTalian) {
-        kosong.append(h('b', { text: 'Senarai tidak dapat dimuat.' }), h('span', { text: state.ralatMuat || '' }), h('div', { style: 'margin-top:14px' }, h('button', { class: 'btn quiet', type: 'button', onclick: () => muatSenarai(true) }, 'Cuba lagi')));
+        kosong.append(h('b', { text: 'Senarai tidak dapat dimuat.' }), h('span', { text: state.ralatMuat || '' }), h('div', { style: 'margin-top:14px' }, h('button', { class: 'btn quiet', type: 'button', onclick: () => muatSenarai() }, 'Cuba lagi')));
       } else if (!jumlah) {
-        kosong.append(h('b', { text: 'Senarai masih kosong.' }), h('span', { text: 'Tambah folder atau fail dalam folder utama Google Drive, kemudian muat semula senarai.' }));
+        kosong.append(h('b', { text: 'Senarai masih kosong.' }), h('span', { text: 'Tambah baris dalam tab Pintasan pada Google Sheet untuk memaparkannya di sini.' }));
       } else {
         kosong.append(h('b', { text: 'Tiada padanan.' }), h('span', { text: q ? 'Tiada fail atau folder untuk "' + $('#cari').value.trim() + '". Cuba kata kunci lain.' : 'Tiada kategori dalam tapisan ini.' }));
       }
@@ -626,7 +626,7 @@
     $$('[data-tapis]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     render();
   }));
-  $('#cubaLagi').addEventListener('click', () => muatSenarai(true));
+  $('#cubaLagi').addEventListener('click', () => muatSenarai());
 
   /* ---------- Akaun ---------- */
   $('#avatarBtn').addEventListener('click', () => {
@@ -712,7 +712,7 @@
   $('#tutupAkaun').addEventListener('click', () => $('#akaunDlg').close());
   $('#logKeluar').addEventListener('click', () => logKeluar('Anda sudah log keluar.'));
   $('#muatSemula').addEventListener('click', async () => {
-    $('#akaunDlg').close(); await muatSenarai(true);
+    $('#akaunDlg').close(); await muatSenarai();
     toast(state.luarTalian ? 'Tidak dapat memuat semula. Senarai simpanan dipaparkan.' : 'Senarai dikemas kini.');
   });
   for (const d of $$('dialog')) d.addEventListener('click', (e) => { if (e.target === d) d.close(); });

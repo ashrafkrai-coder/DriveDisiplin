@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fail-disiplin-v15';
+const CACHE_NAME = 'fail-disiplin-v14';
 const APP_SHELL = [
   './', './index.html', './manifest.json',
   './icons/launchericon-192x192.png', './icons/launchericon-512x512.png',

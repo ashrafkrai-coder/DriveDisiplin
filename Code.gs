@@ -1,22 +1,17 @@
 /**
- * Fail Disiplin: API akaun dan senarai fail Google Drive.
+ * Fail Disiplin 2026: API akaun dan senarai pintasan.
  *
  * Skrip ini diletakkan dalam Google Sheet "Fail Disiplin 2026 - Akaun dan Pintasan"
  * (Sambungan > Apps Script). Ia menyediakan daftar akaun, log masuk dan senarai
- * fail kepada PWA. Senarai fail dibaca terus daripada folder Drive (FOLDER_UTAMA).
+ * pintasan kepada PWA. Tiada kod daftar sekolah diperlukan.
  *
  * Tab dalam Sheet:
  *   Akaun     dicipta automatik. Tukar lajur Status kepada "sekat" untuk menyekat akaun.
- *
- * Folder Drive:
- *   Setiap subfolder dalam FOLDER_UTAMA menjadi satu kategori dan fail di dalamnya
- *   dipaparkan automatik. Letak fail baharu dalam folder Drive; tiada Sheet perlu dikemas kini.
+ *   Pintasan  senarai kategori dan pautan fail. Ubah di sini, PWA terus mengikut.
  */
 
 var TAB_AKAUN = 'Akaun';
-var FOLDER_UTAMA = '1abY0Hpimq4fRokCyNUPHaxmzi-6ZF1mT';
-var KUNCI_CACHE_DRIVE = 'drive-senarai-v1';
-var CACHE_DRIVE_SAAT = 300; // senarai disimpan 5 minit; "Muat semula senarai" dalam app memintas cache
+var TAB_PINTASAN = 'Pintasan';
 var TAJUK_AKAUN = ['ID', 'Nama', 'Emel', 'Hash', 'Salt', 'Status', 'Dicipta', 'Log masuk terakhir', 'Foto'];
 var LAJUR_FOTO = 9;
 var HAD_FOTO = 45000; // had sel Google Sheet ialah 50,000 aksara
@@ -28,7 +23,7 @@ var TETINGKAP_GAGAL_SAAT = 900;
 /* ---------- Titik masuk ---------- */
 
 function doGet() {
-  return json_({ ok: true, mesej: 'API Fail Disiplin aktif.' });
+  return json_({ ok: true, mesej: 'API Fail Disiplin 2026 aktif.' });
 }
 
 function doPost(e) {
@@ -52,7 +47,6 @@ function doPost(e) {
 function sediakan() {
   lembaranAkaun_();
   rahsia_();
-  console.log('Folder Drive: ' + DriveApp.getFolderById(FOLDER_UTAMA).getName());
   console.log('Siap. Tab Akaun disediakan. Seterusnya: Deploy > New deployment > Web app.');
 }
 
@@ -134,137 +128,37 @@ function pintasan_(d) {
   var akaun = semakToken_(d.token);
   if (!akaun) return { ok: false, tamat: true, mesej: 'Sesi tamat. Log masuk semula.' };
 
-  var cache = CacheService.getScriptCache();
-  if (!d.segar) {
-    var simpanan = cache.get(KUNCI_CACHE_DRIVE);
-    if (simpanan) return JSON.parse(simpanan);
-  }
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TAB_PINTASAN);
+  if (!sh || sh.getLastRow() < 2) return { ok: true, kumpulan: [], kemaskini: '' };
 
-  var hasil = { ok: true, kumpulan: bacaDrive_(), kemaskini: Utilities.formatDate(new Date(), 'Asia/Kuala_Lumpur', 'd/M/yyyy, h:mm a') };
-  try { cache.put(KUNCI_CACHE_DRIVE, JSON.stringify(hasil), CACHE_DRIVE_SAAT); } catch (e) { /* terlalu besar untuk cache: abaikan */ }
-  return hasil;
-}
+  var nilai = sh.getRange(2, 1, sh.getLastRow() - 1, 9).getValues();
+  var peta = {};
+  var senarai = [];
+  var kemaskini = '';
 
-/* ---------- Senarai fail terus dari Google Drive ---------- */
-
-/**
- * Setiap subfolder dalam FOLDER_UTAMA menjadi satu kategori. Fail dan subfolder di dalamnya
- * disenaraikan automatik. Fail yang terletak terus dalam folder utama dikumpul sebagai
- * "Dokumen Utama". Nombor di depan nama folder ("5. SURAT") digunakan untuk susunan.
- * Keterangan kategori diambil daripada Description folder di Drive (klik kanan > Folder information).
- */
-function bacaDrive_() {
-  var utama = DriveApp.getFolderById(FOLDER_UTAMA);
-  var kumpulan = [];
-
-  var lepas = senaraiKandungan_(utama, false);
-  if (lepas.length) {
-    kumpulan.push({ susun: -1, kategori: 'pengurusan', ikon: 'carta', tajuk: 'Dokumen Utama',
-      keterangan: 'Fail dalam folder utama.', url: utama.getUrl(), fail: lepas });
-  }
-
-  var folder = utama.getFolders();
-  while (folder.hasNext()) {
-    var f = folder.next();
-    if (f.isTrashed()) continue;
-    var nama = f.getName().trim();
-    var jenis = jenisKategori_(nama);
-    kumpulan.push({
-      susun: nomborDepan_(nama),
-      kategori: jenis.kategori,
-      ikon: jenis.ikon,
-      tajuk: tajukKemas_(nama),
-      keterangan: String(f.getDescription() || '').trim(),
-      url: f.getUrl(),
-      fail: senaraiKandungan_(f, true)
-    });
-  }
-
-  kumpulan.sort(function (a, b) { return a.susun - b.susun || a.tajuk.localeCompare(b.tajuk); });
-  kumpulan.forEach(function (k) { delete k.susun; });
-  return kumpulan;
-}
-
-/** Senarai [nama, url, jenis] untuk fail (dan subfolder jika denganFolder) dalam satu folder. */
-function senaraiKandungan_(folder, denganFolder) {
-  var item = [];
-  if (denganFolder) {
-    var sub = folder.getFolders();
-    while (sub.hasNext()) {
-      var s = sub.next();
-      if (!s.isTrashed()) item.push([s.getName().trim(), s.getUrl(), 'folder']);
+  nilai.forEach(function (r) {
+    if (!kemaskini && String(r[8]).trim()) kemaskini = String(r[8]).trim();
+    var tajuk = String(r[2]).trim();
+    if (!tajuk) return;
+    var k = peta[tajuk];
+    if (!k) {
+      k = {
+        kategori: String(r[0]).trim().toLowerCase(),
+        ikon: String(r[1]).trim().toLowerCase(),
+        tajuk: tajuk,
+        keterangan: String(r[3]).trim(),
+        url: String(r[4]).trim(),
+        fail: []
+      };
+      peta[tajuk] = k;
+      senarai.push(k);
     }
-  }
-  var fail = folder.getFiles();
-  while (fail.hasNext()) {
-    var f = fail.next();
-    if (f.isTrashed()) continue;
-    var mime = f.getMimeType();
-    if (mime === MimeType.SHORTCUT) mime = f.getTargetMimeType() || mime;
-    item.push([buangSambungan_(f.getName().trim()), f.getUrl(), jenisFail_(mime, f.getName())]);
-  }
-  item.sort(function (a, b) {
-    if ((a[2] === 'folder') !== (b[2] === 'folder')) return a[2] === 'folder' ? -1 : 1;
-    return nomborDepan_(a[0]) - nomborDepan_(b[0]) || a[0].localeCompare(b[0]);
+    var namaFail = String(r[5]).trim();
+    var urlFail = String(r[6]).trim();
+    if (namaFail && urlFail) k.fail.push([namaFail, urlFail, String(r[7]).trim() || 'FAIL']);
   });
-  return item;
-}
 
-function jenisFail_(mime, nama) {
-  if (mime === MimeType.FOLDER) return 'folder';
-  if (mime === MimeType.PDF) return 'pdf';
-  if (/document|msword|wordprocessing/.test(mime)) return 'doc';
-  if (/spreadsheet|ms-excel|sheet/.test(mime)) return 'xls';
-  if (/presentation|powerpoint/.test(mime)) return 'ppt';
-  if (/^image\//.test(mime) || mime === MimeType.GOOGLE_DRAWINGS) return 'img';
-  var ext = (String(nama).match(/\.([a-z0-9]{1,4})$/i) || [])[1];
-  return ext ? ext.toLowerCase() : 'fail';
-}
-
-/** Kategori (untuk tapisan) dan ikon dipilih berdasarkan kata kunci dalam nama folder. */
-function jenisKategori_(nama) {
-  var n = nama.toUpperCase();
-  var peta = [
-    [/PEKELILING|SPI/, 'surat', 'spi'],
-    [/SURAT/, 'surat', 'surat'],
-    [/UBK/, 'rekod', 'ubk'],
-    [/SAHSIAH/, 'rekod', 'sahsiah'],
-    [/KES/, 'rekod', 'kes'],
-    [/LEWAT/, 'rekod', 'lewat'],
-    [/PEMERIKSAAN|SPOT|AMARAN/, 'rekod', 'amaran'],
-    [/LAPORAN/, 'rekod', 'laporan'],
-    [/MINIT/, 'pengurusan', 'minit'],
-    [/MESYUARAT/, 'pengurusan', 'mesyuarat'],
-    [/JADUAL|TAKWIM/, 'pengurusan', 'jadual'],
-    [/POSTER|HEBAHAN/, 'pengurusan', 'poster'],
-    [/CARTA|ORGANISASI/, 'pengurusan', 'carta'],
-    [/JOM KE SEKOLAH|JKS/, 'pengurusan', 'jks'],
-    [/SENARAI|BORANG/, 'pengurusan', 'senarai']
-  ];
-  for (var i = 0; i < peta.length; i++) if (peta[i][0].test(n)) return { kategori: peta[i][1], ikon: peta[i][2] };
-  return { kategori: 'pengurusan', ikon: 'folder' };
-}
-
-function nomborDepan_(nama) {
-  var m = String(nama).match(/^\s*(\d+)/);
-  return m ? Number(m[1]) : 9999;
-}
-
-var SINGKATAN_ = ['UBK', 'SPI', 'JKS', 'PIBG', 'KPM', 'JPN', 'PPD', 'SMK', 'LDP', 'HEM', 'PDPC', 'SPBT', 'KSSM'];
-
-/** "10. LAPORAN SAHSIAH MURID " -> "Laporan Sahsiah Murid" (singkatan dikekalkan). */
-function tajukKemas_(nama) {
-  var t = String(nama).replace(/^\s*\d+\s*[.)\-]?\s*/, '').replace(/\s+/g, ' ').trim();
-  if (t !== t.toUpperCase()) return t;
-  return t.split(' ').map(function (w) {
-    if (SINGKATAN_.indexOf(w.replace(/[^A-Z]/g, '')) >= 0) return w;
-    if (['DAN', 'DI', 'KE', 'DARI', 'BAGI', 'UNTUK'].indexOf(w) >= 0) return w.toLowerCase();
-    return w.charAt(0) + w.slice(1).toLowerCase();
-  }).join(' ');
-}
-
-function buangSambungan_(nama) {
-  return String(nama).replace(/\.(pdf|docx?|xlsx?|pptx?|jpe?g|png|heic|webp)$/i, '');
+  return { ok: true, kumpulan: senarai, kemaskini: kemaskini };
 }
 
 /* ---------- Akaun ---------- */
