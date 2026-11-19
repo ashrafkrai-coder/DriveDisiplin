@@ -1,221 +1,658 @@
 <!doctype html>
 <html lang="ms">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0b2b40" />
-    <meta name="description" content="Pintasan pantas Fail Disiplin 2026 SMK Taman Medan." />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" href="icons/launchericon-192x192.png" />
-    <link rel="icon" type="image/png" href="icons/launchericon-192x192.png" />
-    <title>Fail Disiplin 2026</title>
-    <style>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b2b40" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Fail Disiplin SMK Taman Medan: surat, minit dan rekod disiplin dalam satu tempat." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/launchericon-192x192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Fail Disiplin" />
+  <link rel="icon" type="image/png" href="icons/launchericon-192x192.png" />
+  <title>Fail Disiplin</title>
+  <style>
+    :root {
+      --ink: #0b2b40;
+      --ink-2: #29434f;
+      --muted: #5c7381;
+      --bg: #edf1f4;
+      --surface: #ffffff;
+      --line: #dce4e9;
+      --line-soft: #e9eff2;
+      --hero: #0b2b40;
+      --primary: #0b2b40;
+      --on-primary: #ffffff;
+      --teal: #0a7a85;
+      --teal-bg: #e1f2f3;
+      --indigo: #3f51a3;
+      --indigo-bg: #e7eaf8;
+      --brass: #8a600f;
+      --brass-bg: #f5ead0;
+      --brass-solid: #d1a94f;
+      --danger: #b3261e;
+      --danger-bg: #fcebe9;
+      --shadow: 0 1px 2px rgba(11, 43, 64, .05), 0 10px 26px rgba(11, 43, 64, .06);
+      --serif: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      --sans: system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark) {
       :root {
-        --ink: #0b2b40;
-        --ink-soft: #27485a;
-        --teal: #087f8c;
-        --aqua: #dff5f4;
-        --gold: #f5c45d;
-        --paper: #f2f7f8;
-        --card: #ffffff;
-        --line: #d8e4e7;
-        --muted: #607584;
-        --shadow: 0 10px 28px rgba(15, 52, 71, .09);
+        --ink: #eaf1f5; --ink-2: #c6d4dc; --muted: #8fa5b3;
+        --bg: #07131c; --surface: #0f2230; --line: #1e3647; --line-soft: #173040;
+        --hero: #0f2a3d; --primary: #4cc3ce; --on-primary: #05222a;
+        --teal: #4cc3ce; --teal-bg: #12343c; --indigo: #a3b0f2; --indigo-bg: #1d2646;
+        --brass: #e5ba5f; --brass-bg: #3a2d12; --brass-solid: #d9b65a;
+        --danger: #ff8f86; --danger-bg: #3b1714; --shadow: none;
       }
-      * { box-sizing: border-box; }
-      html { background: var(--paper); }
-      body { margin: 0; min-width: 320px; min-height: 100vh; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-      button, input { font: inherit; }
-      button { cursor: pointer; }
-      .shell { width: min(100%, 1120px); margin: 0 auto; padding: 10px 12px calc(24px + env(safe-area-inset-bottom)); }
-      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 2px 10px; }
-      .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-      .crest { display: grid; place-items: center; width: 36px; height: 36px; flex: 0 0 36px; border-radius: 11px; background: var(--ink); color: var(--gold); font-size: 19px; box-shadow: 0 5px 11px rgba(11, 43, 64, .14); }
-      .brand p, .brand h1 { margin: 0; }
-      .brand p { color: var(--muted); font-size: .66rem; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
-      .brand h1 { margin-top: 1px; color: var(--ink); font-size: .98rem; line-height: 1.15; }
-      .install { display: none; align-items: center; gap: 6px; border: 1px solid #b9dde0; border-radius: 999px; min-height: 34px; padding: 0 10px; color: var(--teal); background: #fff; font-size: .78rem; font-weight: 800; white-space: nowrap; }
-      .install.visible { display: flex; }
-      .quickbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; padding: 10px 12px; border: 1px solid #c9e4e6; border-radius: 16px; color: #fff; background: linear-gradient(105deg, #0b2b40, #0b6874); }
-      .quickbar p, .quickbar h2 { margin: 0; }
-      .quickbar p { color: #b9e8ea; font-size: .67rem; font-weight: 800; letter-spacing: .075em; text-transform: uppercase; }
-      .quickbar h2 { margin-top: 2px; font-size: 1rem; line-height: 1.15; }
-      .quick-drive { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; min-height: 34px; border-radius: 10px; padding: 0 10px; color: var(--ink); background: var(--gold); text-decoration: none; font-size: .78rem; font-weight: 850; }
-      .quick-drive:active, .folder-open:active, .file-open:active { transform: scale(.98); }
-      .toolbar { position: relative; z-index: 1; display: grid; gap: 8px; margin: 10px 0 9px; padding: 0; }
-      .search { display: flex; align-items: center; gap: 9px; height: 44px; border: 1px solid var(--line); border-radius: 13px; padding: 0 12px; background: #fff; box-shadow: 0 3px 10px rgba(15,52,71,.03); }
-      .search span { color: var(--teal); font-size: 1.15rem; }
-      .search input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 1rem; }
-      .search input::placeholder { color: #8a9da8; }
-      .filters { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 1px; scrollbar-width: none; }
-      .filters::-webkit-scrollbar { display: none; }
-      .chip { flex: 0 0 auto; border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px; color: var(--ink-soft); background: #fff; font-size: .75rem; font-weight: 780; }
-      .chip[aria-pressed="true"] { border-color: var(--ink); color: #fff; background: var(--ink); }
-      .summary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 2px 2px 8px; }
-      .summary h3 { margin: 0; font-size: .88rem; }
-      .summary p { margin: 0; color: var(--muted); font-size: .72rem; }
-      .grid { display: grid; gap: 8px; grid-template-columns: 1fr; }
-      .folder { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: var(--card); box-shadow: 0 2px 8px rgba(15,52,71,.03); }
-      .folder-main { display: block; min-width: 0; padding-right: 48px; color: inherit; text-decoration: none; }
-      .folder-main:hover { background: #f7fbfc; }
-      .folder-head { display: flex; gap: 10px; align-items: center; min-height: 58px; padding: 11px 12px; }
-      .folder-icon { display: grid; place-items: center; width: 33px; height: 33px; flex: 0 0 33px; border-radius: 10px; background: var(--aqua); font-size: 17px; }
-      .folder-copy { min-width: 0; flex: 1; }
-      .folder-copy h4 { margin: 0; font-size: .9rem; line-height: 1.22; }
-      .folder-more { position: absolute; top: 7px; right: 7px; }
-      .folder-more summary { display: grid; place-items: center; width: 42px; height: 42px; list-style: none; border-radius: 10px; color: var(--teal); background: #edfafa; cursor: pointer; }
-      .folder-more summary::-webkit-details-marker { display: none; }
-      .folder-more summary::after { content: "⌄"; font-size: 1.2rem; font-weight: 850; }
-      .folder-more[open] { position: static; display: block; border-top: 1px solid var(--line); }
-      .folder-more[open] summary { position: absolute; top: 7px; right: 7px; }
-      .folder-more[open] summary::after { content: "⌃"; }
-      .files { display: grid; gap: 7px; padding: 10px; }
-      .file-open { display: flex; align-items: center; gap: 9px; border-radius: 10px; padding: 10px; color: var(--ink-soft); text-decoration: none; font-size: .8rem; font-weight: 720; line-height: 1.28; }
-      .file-open:hover { background: #f4f9fa; }
-      .file-type { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 27px; border-radius: 8px; background: #f1f6f7; color: var(--teal); font-size: .78rem; font-weight: 900; }
-      .empty { display: none; border: 1px dashed #b7c9cf; border-radius: 16px; padding: 28px; color: var(--muted); text-align: center; background: #fff; }
-      .note { margin: 14px 2px 0; color: var(--muted); font-size: .71rem; line-height: 1.45; text-align: center; }
-      .note strong { color: var(--ink-soft); }
-      @media (min-width: 700px) { .shell { padding: 24px 16px 32px; } .quickbar { min-height: 72px; padding: 13px 16px; } .quickbar h2 { font-size: 1.16rem; } .toolbar { grid-template-columns: minmax(320px, 1fr) auto; align-items: center; margin-top: 14px; } .filters { max-width: 520px; } .grid { gap: 10px; grid-template-columns: 1fr; } .folder-head { min-height: 62px; padding: 12px 15px; } .folder-icon { width: 38px; height: 38px; flex-basis: 38px; } .folder-copy h4 { font-size: .96rem; } }
-      @media (prefers-reduced-motion: no-preference) { .folder, .chip, .folder-main, .file-open { transition: transform .16s ease, box-shadow .16s ease, background .16s ease; } .folder:hover { transform: translateY(-1px); box-shadow: var(--shadow); } }
-    </style>
-  </head>
-  <body>
-    <main class="shell">
-      <header class="topbar">
-        <div class="brand">
-          <div class="crest" aria-hidden="true">▤</div>
-          <div><p>SMK Taman Medan</p><h1>Fail Disiplin 2026</h1></div>
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; background: var(--bg); }
+    body { margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.4; -webkit-font-smoothing: antialiased; }
+    [hidden] { display: none !important; }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    svg.ik { flex: none; display: block; }
+
+    /* ---------- Log masuk dan daftar ---------- */
+    .auth { min-height: 100vh; min-height: 100dvh; background: var(--hero); }
+    .auth-wrap { width: min(100%, 460px); min-height: 100vh; min-height: 100dvh; margin: 0 auto; display: grid; grid-template-rows: auto 1fr; }
+    .auth-hero { position: relative; color: #fff; padding: max(env(safe-area-inset-top), 22px) 24px 30px; }
+    .gear { position: absolute; top: max(env(safe-area-inset-top), 14px); right: 14px; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 12px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.78); }
+    .gear:hover { background: rgba(255,255,255,.14); }
+    .auth-logo { width: 64px; height: 64px; border-radius: 16px; display: block; margin-top: 30px; box-shadow: 0 8px 22px rgba(0,0,0,.28); }
+    .auth-hero h1 { margin: 20px 0 0; font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 10vw, 42px); line-height: 1.04; letter-spacing: -.012em; }
+    .auth-rule { width: 44px; height: 3px; border-radius: 2px; background: var(--brass-solid); margin: 14px 0 12px; }
+    .auth-sub { margin: 0; font-weight: 600; font-size: 15px; color: rgba(255,255,255,.92); }
+    .auth-lead { margin: 4px 0 0; font-size: 15px; color: rgba(255,255,255,.7); max-width: 32ch; }
+    .auth-card { align-self: end; background: var(--surface); color: var(--ink); border-radius: 28px 28px 0 0; padding: 22px 20px max(26px, env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,.18); }
+    @media (min-width: 640px) {
+      .auth-wrap { grid-template-rows: auto auto; align-content: center; }
+      .auth-card { align-self: start; border-radius: 24px; padding: 24px; margin: 0 0 40px; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+    }
+    .seg { display: flex; gap: 2px; padding: 3px; border-radius: 13px; background: var(--bg); }
+    .seg button { flex: 1; min-height: 38px; padding: 0 8px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 14px; font-weight: 600; white-space: nowrap; }
+    .seg button[aria-selected="true"], .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(11,43,64,.14); }
+    @media (prefers-color-scheme: dark) { .seg button[aria-selected="true"], .seg button[aria-pressed="true"] { background: var(--line); } }
+    form { display: grid; gap: 14px; margin-top: 18px; }
+    .field { display: grid; gap: 6px; }
+    .field label { font-size: 14px; font-weight: 600; color: var(--ink-2); }
+    .field .hint { font-size: 13px; color: var(--muted); }
+    .control { position: relative; }
+    .control input { width: 100%; height: 50px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--bg); font-size: 16px; outline: 0; transition: border-color .15s, box-shadow .15s, background .15s; }
+    .control input::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+    .control input:focus { border-color: var(--teal); background: var(--surface); box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 24%, transparent); }
+    .control input[aria-invalid="true"] { border-color: var(--danger); }
+    .control.has-btn input { padding-right: 78px; }
+    .reveal { position: absolute; top: 5px; right: 5px; height: 40px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent; color: var(--teal); font-size: 14px; font-weight: 600; }
+    .alert { display: flex; gap: 9px; align-items: flex-start; padding: 11px 13px; border-radius: 12px; background: var(--danger-bg); color: var(--danger); font-size: 14px; line-height: 1.35; }
+    .alert svg { margin-top: 1px; }
+    .info { padding: 11px 13px; border-radius: 12px; background: var(--brass-bg); color: var(--brass); font-size: 14px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 50px; padding: 0 20px; border: 0; border-radius: 14px; background: var(--primary); color: var(--on-primary); font-size: 16px; font-weight: 650; text-decoration: none; transition: transform .12s, opacity .15s; }
+    .btn:active { transform: scale(.985); }
+    .btn[disabled] { opacity: .65; cursor: progress; }
+    .btn.block { width: 100%; }
+    .btn.quiet { background: var(--bg); color: var(--ink); }
+    .btn.danger { background: var(--danger-bg); color: var(--danger); }
+    .spin { width: 17px; height: 17px; border-radius: 50%; border: 2.5px solid currentColor; border-right-color: transparent; animation: putar .7s linear infinite; }
+    @keyframes putar { to { transform: rotate(360deg); } }
+    .swap { margin: 16px 0 0; text-align: center; font-size: 14px; color: var(--muted); }
+    .link { padding: 4px 2px; border: 0; background: none; color: var(--teal); font-weight: 650; text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ---------- Skrin utama ---------- */
+    .bar { position: sticky; top: 0; z-index: 5; padding-top: env(safe-area-inset-top); background: color-mix(in srgb, var(--bg) 84%, transparent); -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .bar.compact { border-bottom-color: var(--line); }
+    .bar-in { width: min(100%, 680px); height: 54px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; }
+    .bar-brand { display: flex; align-items: center; gap: 10px; min-width: 0; opacity: 0; transform: translateY(3px); transition: opacity .2s, transform .2s; }
+    .bar.compact .bar-brand { opacity: 1; transform: none; }
+    .bar-brand img { width: 28px; height: 28px; border-radius: 7px; }
+    .bar-brand span { font-family: var(--serif); font-weight: 600; font-size: 17px; white-space: nowrap; }
+    .avatar { width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 50%; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 700; letter-spacing: .02em; }
+    .app { width: min(100%, 680px); margin: 0 auto; padding: 0 16px max(40px, env(safe-area-inset-bottom)); }
+    .judul { margin: 6px 0 4px; font-family: var(--serif); font-weight: 600; font-size: clamp(32px, 9vw, 40px); line-height: 1.05; letter-spacing: -.012em; }
+    .salam { margin: 0; color: var(--muted); font-size: 15px; }
+    .salam strong { color: var(--ink-2); font-weight: 650; }
+    .drive { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 20px 0 16px; padding: 14px 14px 14px 18px; border-radius: 18px; background: var(--hero); color: #fff; }
+    .drive b { display: block; font-size: 15px; font-weight: 650; }
+    .drive span { display: block; margin-top: 1px; font-size: 13px; color: rgba(255,255,255,.68); }
+    .drive .btn { min-height: 40px; padding: 0 14px; border-radius: 11px; background: var(--brass-solid); color: #1d1606; font-size: 14px; white-space: nowrap; }
+    .cari { display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); color: var(--muted); }
+    .cari:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 22%, transparent); }
+    .cari input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 16px; }
+    .cari input::-webkit-search-cancel-button { -webkit-appearance: none; }
+    .tapis { margin-top: 12px; }
+    .tapis .seg button { font-size: 13px; padding: 0 4px; }
+    .kepala { display: flex; align-items: baseline; justify-content: space-between; margin: 22px 2px 10px; }
+    .kepala h2 { margin: 0; font-size: 15px; font-weight: 650; }
+    .kepala p { margin: 0; font-size: 13px; color: var(--muted); }
+    .groups { display: grid; gap: 10px; }
+    .group { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow); }
+    .g-head { width: 100%; display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 13px; min-height: 68px; padding: 12px 14px; border: 0; background: none; text-align: left; }
+    .g-head:hover { background: color-mix(in srgb, var(--bg) 55%, transparent); }
+    .tile { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 13px; }
+    .tile[data-kat="surat"] { background: var(--teal-bg); color: var(--teal); }
+    .tile[data-kat="rekod"] { background: var(--indigo-bg); color: var(--indigo); }
+    .tile[data-kat="pengurusan"] { background: var(--brass-bg); color: var(--brass); }
+    .tile:not([data-kat="surat"]):not([data-kat="rekod"]):not([data-kat="pengurusan"]) { background: var(--line-soft); color: var(--muted); }
+    .g-title { display: block; font-size: 16px; font-weight: 650; line-height: 1.2; }
+    .g-desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; font-size: 13px; color: var(--muted); line-height: 1.3; }
+    .g-meta { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .g-meta svg { transition: transform .22s ease; }
+    .g-head[aria-expanded="true"] .g-meta svg { transform: rotate(90deg); }
+    .panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .24s ease; }
+    .group.open .panel { grid-template-rows: 1fr; }
+    .panel-in { overflow: hidden; min-height: 0; }
+    .files { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-soft); }
+    .files li + li { border-top: 1px solid var(--line-soft); }
+    .file { display: grid; grid-template-columns: 38px 1fr 16px; align-items: center; gap: 12px; padding: 12px 16px 12px 14px; text-decoration: none; font-size: 14.5px; line-height: 1.3; color: var(--ink-2); }
+    .file:hover { background: color-mix(in srgb, var(--bg) 60%, transparent); }
+    .file .ext { color: var(--muted); }
+    .file.buka { font-weight: 650; color: var(--teal); }
+    .file.buka .ext { color: var(--teal); }
+    .badge { width: 38px; height: 26px; display: grid; place-items: center; border-radius: 7px; background: var(--line-soft); color: var(--muted); font-size: 11px; font-weight: 750; letter-spacing: .02em; }
+    .badge.pdf { background: #fcebe9; color: #b3261e; }
+    .badge.doc { background: #e5eefb; color: #1f5fbf; }
+    .badge.xls { background: #e2f4ea; color: #1b7f4b; }
+    .badge.ppt { background: #fcebdd; color: #b4510f; }
+    .badge.img { background: #f0e7f9; color: #7a3fb0; }
+    .badge.buka { background: var(--teal-bg); color: var(--teal); }
+    @media (prefers-color-scheme: dark) {
+      .badge.pdf { background: #3b1714; color: #ff9a92; }
+      .badge.doc { background: #14284a; color: #8db8ff; }
+      .badge.xls { background: #11321f; color: #7fdba6; }
+      .badge.ppt { background: #3a2110; color: #ffb27c; }
+      .badge.img { background: #2c1a40; color: #d0a8f5; }
+    }
+    .banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 16px 0 0; padding: 10px 12px 10px 14px; border-radius: 13px; background: var(--brass-bg); color: var(--brass); font-size: 14px; }
+    .banner .link { color: inherit; white-space: nowrap; }
+    .skel { height: 68px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); animation: denyut 1.3s ease-in-out infinite; }
+    .skel:nth-child(2) { animation-delay: .12s; } .skel:nth-child(3) { animation-delay: .24s; } .skel:nth-child(4) { animation-delay: .36s; }
+    @keyframes denyut { 50% { opacity: .5; } }
+    .kosong { padding: 36px 20px; text-align: center; color: var(--muted); font-size: 15px; }
+    .kosong b { display: block; margin-bottom: 4px; color: var(--ink-2); font-size: 16px; }
+    .nota { margin: 22px 8px 0; text-align: center; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+
+    /* ---------- Dialog ---------- */
+    dialog { width: 100%; max-width: 480px; margin: auto auto 0; padding: 22px 20px max(24px, env(safe-area-inset-bottom)); border: 0; border-radius: 26px 26px 0 0; background: var(--surface); color: var(--ink); }
+    dialog::backdrop { background: rgba(5, 18, 28, .55); }
+    @media (min-width: 640px) { dialog { margin: auto; border-radius: 24px; } }
+    dialog h2 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 600; }
+    .akaun-id { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .akaun-id .avatar { width: 52px; height: 52px; font-size: 17px; }
+    .akaun-id b { display: block; font-size: 17px; }
+    .akaun-id span { display: block; font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+    .dlg-actions { display: grid; gap: 10px; margin-top: 18px; }
+    .status { min-height: 20px; margin: 0; font-size: 13.5px; color: var(--muted); }
+    .status.ok { color: var(--teal); } .status.ralat { color: var(--danger); }
+    .toast { position: fixed; left: 50%; bottom: max(24px, env(safe-area-inset-bottom)); transform: translate(-50%, 12px); max-width: calc(100% - 32px); padding: 11px 16px; border-radius: 13px; background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 30; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- Log masuk dan daftar -->
+<section id="auth" class="auth" hidden>
+  <div class="auth-wrap">
+    <div class="auth-hero">
+      <button id="gearBtn" class="gear" type="button" aria-label="Tetapan sambungan pelayan"><span data-ikon="tetapan" data-saiz="20"></span></button>
+      <img class="auth-logo" src="icons/launchericon-192x192.png" width="64" height="64" alt="" />
+      <h1>Fail Disiplin</h1>
+      <div class="auth-rule" aria-hidden="true"></div>
+      <p class="auth-sub">SMK Taman Medan</p>
+      <p class="auth-lead">Surat, minit dan rekod disiplin sekolah dalam satu tempat.</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="seg" role="tablist" aria-label="Pilih tindakan">
+        <button id="tabMasuk" role="tab" type="button" aria-selected="true" aria-controls="formMasuk">Log masuk</button>
+        <button id="tabDaftar" role="tab" type="button" aria-selected="false" aria-controls="formDaftar">Daftar akaun</button>
+      </div>
+      <p id="apiNote" class="info" style="margin-top:14px" hidden>Sambungan pelayan belum ditetapkan. Ketik ikon tetapan di penjuru atas untuk menampal alamatnya.</p>
+      <p id="infoAuth" class="info" style="margin-top:14px" role="status" hidden></p>
+
+      <form id="formMasuk" novalidate aria-labelledby="tabMasuk">
+        <div class="field">
+          <label for="mEmel">Emel</label>
+          <div class="control"><input id="mEmel" name="emel" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nama@sekolah.edu.my" required /></div>
         </div>
-        <button id="installButton" class="install" type="button" aria-label="Pasang aplikasi"><span>⊞</span> Pasang</button>
-      </header>
-
-      <section class="quickbar" aria-labelledby="quickTitle">
-        <div><p>Pintasan Google Drive</p><h2 id="quickTitle">Akses Fail Disiplin dengan pantas</h2></div>
-        <a class="quick-drive" href="https://drive.google.com/drive/folders/1abY0Hpimq4fRokCyNUPHaxmzi-6ZF1mT" target="_blank" rel="noopener">Drive ↗</a>
-      </section>
-
-      <section id="pintasan" class="toolbar" aria-label="Cari dan tapis pintasan">
-        <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Cari fail atau folder…" autocomplete="off" /></label>
-        <div class="filters" role="group" aria-label="Kategori fail">
-          <button class="chip" type="button" data-filter="all" aria-pressed="true">Semua</button>
-          <button class="chip" type="button" data-filter="surat" aria-pressed="false">Surat</button>
-          <button class="chip" type="button" data-filter="rekod" aria-pressed="false">Rekod & Kes</button>
-          <button class="chip" type="button" data-filter="pengurusan" aria-pressed="false">Pengurusan</button>
+        <div class="field">
+          <label for="mKata">Kata laluan</label>
+          <div class="control has-btn">
+            <input id="mKata" name="kata" type="password" autocomplete="current-password" placeholder="Kata laluan anda" required />
+            <button class="reveal" type="button" data-reveal="mKata" aria-label="Papar kata laluan">Papar</button>
+          </div>
         </div>
-      </section>
+        <div id="ralatMasuk" class="alert" role="alert" hidden></div>
+        <button id="btnMasuk" class="btn block" type="submit">Log masuk</button>
+        <p class="swap" style="margin:0">Belum ada akaun? <button class="link" type="button" data-ke="daftar">Daftar akaun</button></p>
+      </form>
 
-      <div class="summary"><h3>Pintasan utama</h3><p id="resultCount" aria-live="polite"></p></div>
-      <section id="folderGrid" class="grid" aria-label="Senarai pintasan fail"></section>
-      <p id="emptyState" class="empty">Tiada pintasan sepadan. Cuba kata kunci lain.</p>
-      <p class="note"><strong>Kemaskini 14 September 2026.</strong> Pautan membuka Google Drive dalam tab baharu dan memerlukan sambungan internet.</p>
-    </main>
+      <form id="formDaftar" novalidate aria-labelledby="tabDaftar" hidden>
+        <div class="field">
+          <label for="dNama">Nama penuh</label>
+          <div class="control"><input id="dNama" name="nama" type="text" autocomplete="name" placeholder="Seperti dalam kad pengenalan" required /></div>
+        </div>
+        <div class="field">
+          <label for="dEmel">Emel</label>
+          <div class="control"><input id="dEmel" name="emel" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="nama@sekolah.edu.my" required /></div>
+        </div>
+        <div class="field">
+          <label for="dKata">Kata laluan</label>
+          <div class="control has-btn">
+            <input id="dKata" name="kata" type="password" autocomplete="new-password" placeholder="Sekurang-kurangnya 8 aksara" required />
+            <button class="reveal" type="button" data-reveal="dKata" aria-label="Papar kata laluan">Papar</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="dSah">Sahkan kata laluan</label>
+          <div class="control"><input id="dSah" name="sah" type="password" autocomplete="new-password" placeholder="Taip semula kata laluan" required /></div>
+        </div>
+        <div id="ralatDaftar" class="alert" role="alert" hidden></div>
+        <button id="btnDaftar" class="btn block" type="submit">Daftar akaun</button>
+        <p class="swap" style="margin:0">Sudah ada akaun? <button class="link" type="button" data-ke="masuk">Log masuk</button></p>
+      </form>
+    </div>
+  </div>
+</section>
 
-    <script>
-      const folderGroups = [
-        { category: 'surat', icon: '✉', title: 'Surat', description: 'Surat tindakan, lantikan dan rujukan', url: 'https://drive.google.com/drive/folders/1OkoAZZFlN1Go21RTM6JLIgY74t68Gr_i', files: [
-          ['SURAT BUANG SEKOLAH', 'https://drive.google.com/drive/folders/1vrMbCOZMxtys9qsAWiyc6yxRxqNWSBLl', 'folder'],
-          ['SURAT GANTUNG', 'https://drive.google.com/drive/folders/1w37hZvyYuNv1hHOYNqVAx0afKrQpunzC', 'folder'],
-          ['SURAT MAKLUMAN KEPADA IBU BAPA', 'https://drive.google.com/drive/folders/1aWZZsRwvtR0ZyeZqBrY_pfUdXAORGV4c', 'folder'],
-          ['SURAT AMARAN DALAMAN', 'https://drive.google.com/drive/folders/1ABmsKugqE081xB5sQpzUfUNJh-glpJrY', 'folder'],
-          ['SURAT KUASA MEROTAN', 'https://drive.google.com/drive/folders/10HSkYCfsSL3d-EIxIzDrldYHsCQEvs0Q', 'folder'],
-          ['SURAT LANTIKAN DISIPLIN', 'https://drive.google.com/drive/folders/1SaKwIKJiyIpN4lD7UJMSz5OXKOma_dso', 'folder'],
-          ['SURAT PANGGILAN MESYUARAT', 'https://drive.google.com/drive/folders/1xsTdKhannZEx9u0qZa40kYyltzlcwCNn', 'folder'],
-          ['SURAT PERTUDUHAN KES', 'https://drive.google.com/drive/folders/1HH_3L7MSciCUDKsDsFn2S09akfoGP3hR', 'folder'],
-          ['SURAT PERTUDUHAN GANTUNG', 'https://drive.google.com/drive/folders/1Iz1BsrB-jGYo4hPM5y4jdD7s55TpfEGR', 'folder']
-        ]},
-        { category: 'rekod', icon: '☷', title: 'Minit Kes', description: 'Rekod minit kes murid', url: 'https://drive.google.com/drive/folders/1LIDIuG9k-iwhosbKakJ6kxLuCGJimv7C', files: [
-          ['01 minit kes Adam Haziq 5I dan Nabil 5J', 'https://docs.google.com/document/d/1i4UsXUDEw-4dyG57VIj3wDmzg3OIUg_V/edit?usp=drivesdk', 'DOC'],
-          ['02 minit kes Wafiq 3G', 'https://docs.google.com/document/d/1h0j6aOtZ33QMOpGtwTprHsKDd2ffNhPd/edit?usp=drivesdk', 'DOC'],
-          ['03 minit kes 3 Ikhlas', 'https://docs.google.com/document/d/1X4p5EfKQ-r1KG2d0fWxFJ-VqqKrtl6JY/edit?usp=drivesdk', 'DOC'],
-          ['04 minit kes Adam Riezkie 4 Ikhlas', 'https://docs.google.com/document/d/1E9qdM0RdIxhrIAARgO5B0BzG_EwLDUSv/edit?usp=drivesdk', 'DOC'],
-          ['05 minit kes Ammar Rifqi & Iman Umayr', 'https://docs.google.com/document/d/1wRKXwhKtnKPwloIWQrRIG9AS7hem8kkb/edit?usp=drivesdk', 'DOC']
-        ]},
-        { category: 'pengurusan', icon: '☑', title: 'Minit Mesyuarat Lembaga', description: 'Minit dan maklum balas mesyuarat', url: 'https://drive.google.com/drive/folders/1mBqJuze_teT0aNsgqc4k5GKa_qxZ8bTe', files: [
-          ['Minit Mesyuarat Disiplin & Pengawas (PDF)', 'https://drive.google.com/file/d/1pjEYhQhkr9JVv2YRcdxrF2ZTIVmLcTix/view?usp=drivesdk', 'PDF'],
-          ['Minit Mesyuarat Disiplin & Pengawas (DOCX)', 'https://docs.google.com/document/d/17hvURWQkPS5W3NtV1vTy52FAM8Eafe-H/edit?usp=drivesdk', 'DOC'],
-          ['Maklum Balas Minit Mesyuarat (PDF)', 'https://drive.google.com/file/d/1E1k6vwjaU5ewbqZjtuXo8-u-yFgRqDJ_/view?usp=drivesdk', 'PDF'],
-          ['Maklum Balas Minit Mesyuarat (DOCX)', 'https://docs.google.com/document/d/1JeswV8Uf82ZYdrmpMnh62S5uaVur4l2U/edit?usp=drivesdk', 'DOC']
-        ]},
-        { category: 'pengurusan', icon: '◷', title: 'Jadual Bertugas Pagar', description: 'Jadual bertugas pagar 2026', url: 'https://drive.google.com/drive/folders/1SSql-D0ptpXxmU-vOcOLYZ_-3vpwwiEb', files: [
-          ['Jadual Bertugas Pagar Bil. 4 (PDF)', 'https://drive.google.com/file/d/1RQ320K8hgmvZJCTYbp6FYkksl9vE2C1B/view?usp=drivesdk', 'PDF'],
-          ['Jadual Bertugas Pagar Bil. 4 (DOCX)', 'https://docs.google.com/document/d/1Z2cupq44005VDtW4KtdXl5BzFbzx756W/edit?usp=drivesdk', 'DOC'],
-          ['Jadual Bertugas Pagar Bil. 3', 'https://docs.google.com/document/d/1lpwnU-658ih1PTQk0tc-CBQP3COcZDMJ/edit?usp=drivesdk', 'DOC'],
-          ['Jadual Bertugas Pagar Bil. 2', 'https://docs.google.com/document/d/1dtwBRMhogfZK8jhTu4kPCcMn6i-Zk1ZW/edit?usp=drivesdk', 'DOC'],
-          ['Jadual Bertugas Pagar Bil. 1 (PDF)', 'https://drive.google.com/file/d/12flLa0dJV1hYmaSWUDSZ0bTzMYhKbiWp/view?usp=drivesdk', 'PDF']
-        ]},
-        { category: 'rekod', icon: '▥', title: 'Laporan Kes Disiplin', description: 'Statistik dan analisis kes', url: 'https://drive.google.com/drive/folders/1NJ0e2kZ1KEpo2vgDIVWJtOmx6UbbVviQ', files: [
-          ['Statistik Salah Laku 2024–Ogos 2026', 'https://docs.google.com/spreadsheets/d/1oDIETGFhH9ptXAS-ej8mkUiGnenEGLEY/edit?usp=drivesdk', 'XLS'],
-          ['Perbandingan Kes 2025 dan 2026', 'https://docs.google.com/presentation/d/1rGlsSMNNa55R6Rd9W2xpXsnr0NtkP-Ty/edit?usp=drivesdk', 'PPT'],
-          ['Analisis Disiplin Jan–April 2026 (PDF)', 'https://drive.google.com/file/d/1J2r1DsHrGYB3fjMd1-U2GUfa_L3g8piR/view?usp=drivesdk', 'PDF'],
-          ['Bulan Januari hingga April 2026', 'https://drive.google.com/drive/folders/1ZMUWc95Wvu0lxTheI4nWFFT6C4u0rH7R', 'folder']
-        ]},
-        { category: 'surat', icon: '!', title: 'Rekod Surat Amaran', description: 'Rekod surat amaran dalaman', url: 'https://drive.google.com/drive/folders/1IJHXRgGSi4LKCzNW66RK7Xt5laA741cH', files: [
-          ['REKOD SURAT AMARAN DALAMAN', 'https://docs.google.com/spreadsheets/d/15me2H71-Lx2efT8KDgFUSfkGCl1PB-n8Bu-fSXBq9G8/edit?usp=drivesdk', 'XLS']
-        ]},
-        { category: 'rekod', icon: '⌑', title: 'Borang Rujukan UBK', description: 'Borang rujukan bimbingan & kaunseling', url: 'https://drive.google.com/drive/folders/1JAZnd1QR8G0psI8y2XzWCqxboINqkv0Z', files: [
-          ['Borang Rujukan Perkhidmatan Bimbingan dan Kaunseling', 'https://docs.google.com/document/d/1jYajk5UcBp7C1Hn61cZhFP6jgtUlNSLB/edit?usp=drivesdk', 'DOC'],
-          ['Borang Rujukan UBK — Sesi Pagi', 'https://drive.google.com/drive/folders/1buSTSFG91or_gE-gVZ_tHvsp6tmWbFOc', 'folder']
-        ]},
-        { category: 'rekod', icon: '≡', title: 'Senarai Kes 2026', description: 'Senarai kes mengikut sesi', url: 'https://drive.google.com/drive/folders/1GSbgrQnbiorBbBpQagCjT6jj6gCX1Fkf', files: [
-          ['Sesi Pagi — Senarai Kes Salah Laku 2026', 'https://docs.google.com/spreadsheets/d/1rFvIjOcl8eFxv9zNKcfSFb-trqmPl7mF/edit?usp=drivesdk', 'XLS'],
-          ['Sesi Pagi — Senarai Nama Vape', 'https://docs.google.com/spreadsheets/d/14CIusSR1rB9tSxlPl8ubHnnQMTrkLn-9/edit?usp=drivesdk', 'XLS'],
-          ['Sesi Petang', 'https://drive.google.com/drive/folders/1lyflPDF9d7w-5K359-ufkoc8EHk_SWvu', 'folder']
-        ]},
-        { category: 'rekod', icon: '◴', title: 'Rekod Murid Lewat', description: 'Rekod kehadiran dan intervensi lewat', url: 'https://drive.google.com/drive/folders/1_peOUPYsDMNp1jqXAKMdHU_nEFANMGL_', files: [
-          ['Tindakan Intervensi Murid Lewat 2026', 'https://docs.google.com/spreadsheets/d/1JCtTIblOZ8LyvKngUS7kyfXzRsvzvVFa/edit?usp=drivesdk', 'XLS'],
-          ['2026 Sesi Pagi Rekod Murid Lewat', 'https://docs.google.com/spreadsheets/d/1mYWvMZxg7LjjH1jsOEhk0jwOsmNgU8Na/edit?usp=drivesdk', 'XLS'],
-          ['Sesi Petang', 'https://drive.google.com/drive/folders/1gFzrFEMEZfZ1b7tCF8_gFN2CRjihQAwh', 'folder']
-        ]},
-        { category: 'pengurusan', icon: '⌂', title: 'Jom Ke Sekolah', description: 'Dokumen program Jom Ke Sekolah', url: 'https://drive.google.com/drive/folders/1YQEyDyZ5N6pXbaKufoD1cQVCOJkKP7Vh', files: [
-          ['Pelan Lantai JKS AGP 2MK', 'https://docs.google.com/document/d/1Lg7kXl5RqpJOE5lZmeP7VOOcyy5im9Nr/edit?usp=drivesdk', 'DOC']
-        ]}
-      ];
+<!-- Skrin utama -->
+<div id="app" hidden>
+  <header class="bar" id="bar">
+    <div class="bar-in">
+      <div class="bar-brand"><img src="icons/launchericon-192x192.png" alt="" /><span>Fail Disiplin</span></div>
+      <button id="avatarBtn" class="avatar" type="button" aria-label="Akaun saya" aria-haspopup="dialog">?</button>
+    </div>
+  </header>
 
-      const grid = document.querySelector('#folderGrid');
-      const search = document.querySelector('#search');
-      const count = document.querySelector('#resultCount');
-      const empty = document.querySelector('#emptyState');
-      let selectedFilter = 'all';
+  <main class="app">
+    <h1 class="judul" id="judul">Fail Disiplin</h1>
+    <p class="salam">Selamat datang, <strong id="namaPengguna"></strong>.</p>
 
-      const escapeHTML = (value) => value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[char]);
-      const matches = (group, query) => [group.title, group.description, ...group.files.map((file) => file[0])].join(' ').toLocaleLowerCase('ms').includes(query);
+    <div class="drive">
+      <div><b>Folder utama di Google Drive</b><span>Semua fail asal disimpan di sini.</span></div>
+      <a class="btn" href="https://drive.google.com/drive/folders/1abY0Hpimq4fRokCyNUPHaxmzi-6ZF1mT" target="_blank" rel="noopener noreferrer">Buka Drive</a>
+    </div>
 
-      function render() {
-        const query = search.value.trim().toLocaleLowerCase('ms');
-        const visible = folderGroups.filter((group) => (selectedFilter === 'all' || group.category === selectedFilter) && (!query || matches(group, query)));
-        grid.innerHTML = visible.map((group) => {
-          const list = group.files.map(([name, url, type]) => `<a class="file-open" href="${url}" target="_blank" rel="noopener"><span class="file-type">${type === 'folder' ? '↗' : type}</span><span>${escapeHTML(name)}</span></a>`).join('');
-          return `<article class="folder"><a class="folder-main" href="${group.url}" target="_blank" rel="noopener" aria-label="Folder ${escapeHTML(group.title)}"><div class="folder-head"><div class="folder-icon" aria-hidden="true">${group.icon}</div><div class="folder-copy"><h4>${escapeHTML(group.title)}</h4></div></div></a><details class="folder-more"><summary aria-label="Lihat ${group.files.length} pintasan dalam ${escapeHTML(group.title)}"></summary><div class="files">${list}</div></details></article>`;
-        }).join('');
-        count.textContent = `${visible.length} daripada ${folderGroups.length} kategori`;
-        empty.style.display = visible.length ? 'none' : 'block';
+    <label class="cari"><span data-ikon="cari" data-saiz="19"></span><span class="sr">Cari fail atau folder</span><input id="cari" type="search" placeholder="Cari fail atau folder" autocomplete="off" enterkeyhint="search" /></label>
+    <div class="tapis"><div class="seg" id="tapis" role="group" aria-label="Tapis kategori">
+      <button type="button" data-tapis="semua" aria-pressed="true">Semua</button>
+      <button type="button" data-tapis="surat" aria-pressed="false">Surat</button>
+      <button type="button" data-tapis="rekod" aria-pressed="false">Rekod &amp; Kes</button>
+      <button type="button" data-tapis="pengurusan" aria-pressed="false">Pengurusan</button>
+    </div></div>
+
+    <div id="banner" class="banner" hidden><span>Tiada sambungan. Senarai terakhir yang disimpan dipaparkan.</span><button class="link" id="cubaLagi" type="button">Cuba lagi</button></div>
+
+    <div class="kepala"><h2>Senarai fail</h2><p id="bilangan" aria-live="polite"></p></div>
+    <div id="senarai" class="groups"></div>
+    <div id="kosong" class="kosong" hidden></div>
+    <p class="nota" id="nota"></p>
+  </main>
+</div>
+
+<!-- Akaun -->
+<dialog id="akaunDlg" aria-labelledby="akaunTajuk">
+  <h2 id="akaunTajuk" class="sr">Akaun saya</h2>
+  <div class="akaun-id"><span class="avatar" id="avatarBesar" aria-hidden="true"></span><div><b id="akaunNama"></b><span id="akaunEmel"></span></div></div>
+  <div class="dlg-actions">
+    <button class="btn quiet" id="muatSemula" type="button">Muat semula senarai</button>
+    <button class="btn danger" id="logKeluar" type="button">Log keluar</button>
+    <button class="btn quiet" id="tutupAkaun" type="button">Tutup</button>
+  </div>
+</dialog>
+
+<!-- Tetapan sambungan -->
+<dialog id="tetapanDlg" aria-labelledby="tetapanTajuk">
+  <h2 id="tetapanTajuk">Tetapan sambungan</h2>
+  <form id="formTetapan" novalidate>
+    <div class="field">
+      <label for="apiInput">Alamat web app Google Apps Script</label>
+      <div class="control"><input id="apiInput" type="url" inputmode="url" autocapitalize="none" spellcheck="false" placeholder="https://script.google.com/macros/s/.../exec" /></div>
+      <span class="hint">Tampal alamat yang berakhir dengan /exec. Pentadbir mendapatkannya selepas deploy skrip.</span>
+    </div>
+    <p id="tetapanStatus" class="status" role="status"></p>
+    <div class="dlg-actions" style="margin-top:0">
+      <button class="btn" id="simpanApi" type="submit">Simpan</button>
+      <button class="btn quiet" id="ujiApi" type="button">Uji sambungan</button>
+      <button class="btn quiet" id="tutupTetapan" type="button">Tutup</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+  /* Tampal alamat web app (.../exec) di sini jika mahu ia tetap untuk semua pengguna.
+     Jika dibiarkan kosong, alamat disimpan melalui ikon tetapan pada skrin log masuk. */
+  const API_DEFAULT = 'https://script.google.com/macros/s/AKfycbw5BwuK0mWvT_pdh2sToU3t53xOA8q6PW0CTCXAJ77MStxrj3W42pKCgEoZRUpApA2UQw/exec';
+
+  /* ---------- Bantuan ---------- */
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const LS = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  };
+  const apiUrl = () => (LS.get('fd_api') || API_DEFAULT || '').trim();
+  const urlSelamat = (u) => (/^https:\/\//i.test(u) ? u : '#');
+
+  const IKON = {
+    folder: '<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.2h7.5A2.5 2.5 0 0 1 21 9.7v7.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/>',
+    surat: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7.5 8 6 8-6"/>',
+    spi: '<path d="M6 4h11a2 2 0 0 1 2 2v14H8a2 2 0 0 1-2-2z"/><path d="M6 18a2 2 0 0 1 2-2h11"/>',
+    minit: '<path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+    mesyuarat: '<circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M16 5.2a3 3 0 0 1 0 5.6M17.5 14a5 5 0 0 1 3 5"/>',
+    jadual: '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    poster: '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-4.5 3.5 3 3-2.5 4.5 4"/>',
+    laporan: '<path d="M4 20V10M10 20V4M16 20v-7M3 20h18"/>',
+    kes: '<rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3.5 13h17"/>',
+    sahsiah: '<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+    amaran: '<path d="M12 4 21 19.5H3z"/><path d="M12 10v4.5M12 17.2v.1"/>',
+    ubk: '<path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4A8 8 0 1 1 20 12z"/>',
+    senarai: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r=".9"/><circle cx="4.5" cy="12" r=".9"/><circle cx="4.5" cy="18" r=".9"/>',
+    lewat: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    jks: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 10v9.5h13V10M10 19.5v-5h4v5"/>',
+    carta: '<rect x="9" y="3.5" width="6" height="5" rx="1.2"/><rect x="3" y="15.5" width="6" height="5" rx="1.2"/><rect x="15" y="15.5" width="6" height="5" rx="1.2"/><path d="M12 8.5V12M6 15.5V12h12v3.5"/>',
+    cari: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/>',
+    tetapan: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+    luar: '<path d="M14 4h6v6M20 4l-9 9M18 14v4.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>',
+    kanan: '<path d="m9 6 6 6-6 6"/>',
+    amaranBulat: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16v.1"/>'
+  };
+  function ikon(nama, saiz = 20) {
+    const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('width', saiz); s.setAttribute('height', saiz);
+    s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.7');
+    s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round');
+    s.setAttribute('aria-hidden', 'true'); s.setAttribute('class', 'ik');
+    s.innerHTML = IKON[nama] || IKON.folder;
+    return s;
+  }
+  function h(tag, props, ...anak) {
+    const el = document.createElement(tag);
+    if (props) for (const [k, v] of Object.entries(props)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const a of anak.flat()) { if (a == null) continue; el.append(a.nodeType ? a : document.createTextNode(a)); }
+    return el;
+  }
+  let masaToast;
+  function toast(teks) {
+    const t = $('#toast'); t.textContent = teks; t.classList.add('show');
+    clearTimeout(masaToast); masaToast = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ---------- Pelayan ---------- */
+  async function api(aksi, data = {}) {
+    const url = apiUrl();
+    if (!url) throw new Error('TIADA_API');
+    const kawal = new AbortController();
+    const had = setTimeout(() => kawal.abort(), 30000);
+    try {
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ aksi, ...data }), signal: kawal.signal });
+      let json;
+      try { json = await res.json(); } catch (e) { throw new Error('RESPONS'); }
+      return json;
+    } finally { clearTimeout(had); }
+  }
+  function mesejRalat(e) {
+    if (e && e.message === 'TIADA_API') return 'Sambungan pelayan belum ditetapkan. Ketik ikon tetapan di penjuru atas.';
+    if (e && e.message === 'RESPONS') return 'Pelayan memberi respons yang tidak dijangka. Semak alamat sambungan dalam tetapan.';
+    return 'Tidak dapat menghubungi pelayan. Semak sambungan internet dan cuba lagi.';
+  }
+
+  /* ---------- Keadaan ---------- */
+  const state = { kumpulan: [], kemaskini: '', filter: 'semua', buka: new Set(), memuat: false, luarTalian: false };
+
+  function pengguna() { try { return JSON.parse(LS.get('fd_user') || 'null'); } catch (e) { return null; } }
+  function simpanSesi(res) {
+    LS.set('fd_token', res.token);
+    LS.set('fd_user', JSON.stringify({ nama: res.nama, emel: res.emel }));
+  }
+  function inisial(nama) {
+    const p = String(nama || '').trim().split(/\s+/).filter(Boolean);
+    return ((p[0] || '?')[0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+  }
+
+  /* ---------- Skrin ---------- */
+  function tunjukAuth(mesej) {
+    $('#app').hidden = true; $('#auth').hidden = false;
+    document.body.style.background = 'var(--hero)';
+    $('#apiNote').hidden = !!apiUrl();
+    const info = $('#infoAuth');
+    info.hidden = !mesej; info.textContent = mesej || '';
+    tukarTab('masuk');
+  }
+  function tunjukApp() {
+    $('#auth').hidden = true; $('#app').hidden = false;
+    document.body.style.background = '';
+    const u = pengguna() || {};
+    $('#namaPengguna').textContent = u.nama || 'pengguna';
+    $('#avatarBtn').textContent = inisial(u.nama);
+  }
+  function tukarTab(ke) {
+    const masuk = ke === 'masuk';
+    $('#tabMasuk').setAttribute('aria-selected', masuk); $('#tabDaftar').setAttribute('aria-selected', !masuk);
+    $('#formMasuk').hidden = !masuk; $('#formDaftar').hidden = masuk;
+    kosongkanRalat();
+  }
+  function kosongkanRalat() {
+    ['#ralatMasuk', '#ralatDaftar'].forEach((s) => { const el = $(s); el.hidden = true; el.textContent = ''; });
+    $$('input[aria-invalid]').forEach((i) => i.removeAttribute('aria-invalid'));
+  }
+  function tunjukRalat(sel, teks, medan) {
+    const el = $(sel); el.textContent = '';
+    el.append(ikon('amaranBulat', 18), h('span', { text: teks }));
+    el.hidden = false;
+    if (medan) { medan.setAttribute('aria-invalid', 'true'); medan.focus(); }
+  }
+  function sibuk(btn, benar, label) {
+    btn.disabled = benar;
+    btn.textContent = '';
+    if (benar) btn.append(h('span', { class: 'spin', 'aria-hidden': 'true' }), label);
+    else btn.textContent = label;
+  }
+
+  /* ---------- Log masuk dan daftar ---------- */
+  $('#tabMasuk').addEventListener('click', () => tukarTab('masuk'));
+  $('#tabDaftar').addEventListener('click', () => tukarTab('daftar'));
+  $$('[data-ke]').forEach((b) => b.addEventListener('click', () => { tukarTab(b.dataset.ke); (b.dataset.ke === 'daftar' ? $('#dNama') : $('#mEmel')).focus(); }));
+  $$('[data-reveal]').forEach((b) => b.addEventListener('click', () => {
+    const i = $('#' + b.dataset.reveal); const tunjuk = i.type === 'password';
+    i.type = tunjuk ? 'text' : 'password'; b.textContent = tunjuk ? 'Sembunyi' : 'Papar';
+    b.setAttribute('aria-label', tunjuk ? 'Sembunyi kata laluan' : 'Papar kata laluan');
+  }));
+  const sahEmel = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+  $('#formMasuk').addEventListener('submit', async (e) => {
+    e.preventDefault(); kosongkanRalat(); $('#infoAuth').hidden = true;
+    const emel = $('#mEmel').value.trim(), kata = $('#mKata').value;
+    if (!sahEmel(emel)) return tunjukRalat('#ralatMasuk', 'Masukkan emel yang sah, contohnya nama@sekolah.edu.my.', $('#mEmel'));
+    if (!kata) return tunjukRalat('#ralatMasuk', 'Masukkan kata laluan anda.', $('#mKata'));
+    const btn = $('#btnMasuk'); sibuk(btn, true, 'Sedang log masuk');
+    try {
+      const res = await api('masuk', { emel, kata });
+      if (!res.ok) return tunjukRalat('#ralatMasuk', res.mesej || 'Log masuk gagal. Cuba lagi.');
+      simpanSesi(res); $('#formMasuk').reset(); mulaApp(true);
+    } catch (err) { tunjukRalat('#ralatMasuk', mesejRalat(err)); }
+    finally { sibuk(btn, false, 'Log masuk'); }
+  });
+
+  $('#formDaftar').addEventListener('submit', async (e) => {
+    e.preventDefault(); kosongkanRalat();
+    const nama = $('#dNama').value.trim(), emel = $('#dEmel').value.trim(), kata = $('#dKata').value, sah = $('#dSah').value;
+    if (nama.length < 2) return tunjukRalat('#ralatDaftar', 'Masukkan nama penuh anda.', $('#dNama'));
+    if (!sahEmel(emel)) return tunjukRalat('#ralatDaftar', 'Masukkan emel yang sah, contohnya nama@sekolah.edu.my.', $('#dEmel'));
+    if (kata.length < 8) return tunjukRalat('#ralatDaftar', 'Kata laluan mesti sekurang-kurangnya 8 aksara.', $('#dKata'));
+    if (kata !== sah) return tunjukRalat('#ralatDaftar', 'Kata laluan tidak sama. Taip semula pada ruang pengesahan.', $('#dSah'));
+    const btn = $('#btnDaftar'); sibuk(btn, true, 'Sedang mendaftar');
+    try {
+      const res = await api('daftar', { nama, emel, kata });
+      if (!res.ok) return tunjukRalat('#ralatDaftar', res.mesej || 'Pendaftaran gagal. Cuba lagi.');
+      simpanSesi(res); $('#formDaftar').reset(); mulaApp(true); toast('Akaun dicipta. Selamat datang.');
+    } catch (err) { tunjukRalat('#ralatDaftar', mesejRalat(err)); }
+    finally { sibuk(btn, false, 'Daftar akaun'); }
+  });
+
+  function logKeluar(mesej) {
+    LS.del('fd_token'); LS.del('fd_user'); LS.del('fd_cache');
+    state.kumpulan = []; state.buka.clear(); $('#cari').value = '';
+    if ($('#akaunDlg').open) $('#akaunDlg').close();
+    tunjukAuth(mesej);
+  }
+
+  /* ---------- Senarai ---------- */
+  function muatCache() {
+    try { const c = JSON.parse(LS.get('fd_cache') || 'null'); if (c && Array.isArray(c.kumpulan)) { state.kumpulan = c.kumpulan; state.kemaskini = c.kemaskini || ''; return true; } } catch (e) {}
+    return false;
+  }
+  async function muatSenarai() {
+    if (state.memuat) return; state.memuat = true;
+    if (!state.kumpulan.length) paparRangka();
+    try {
+      const res = await api('pintasan', { token: LS.get('fd_token') });
+      if (res.tamat) return logKeluar('Sesi tamat. Log masuk semula.');
+      if (!res.ok) throw new Error('RESPONS');
+      state.kumpulan = res.kumpulan || []; state.kemaskini = res.kemaskini || '';
+      LS.set('fd_cache', JSON.stringify({ kumpulan: state.kumpulan, kemaskini: state.kemaskini }));
+      state.luarTalian = false;
+    } catch (err) { state.luarTalian = true; state.ralatMuat = mesejRalat(err); }
+    finally { state.memuat = false; render(); }
+  }
+  function paparRangka() {
+    const s = $('#senarai'); s.textContent = ''; $('#kosong').hidden = true;
+    for (let i = 0; i < 4; i++) s.append(h('div', { class: 'skel' }));
+  }
+  function jenisKelas(j) {
+    const t = String(j || '').toLowerCase();
+    return ['pdf', 'doc', 'xls', 'ppt', 'img'].includes(t) ? t : '';
+  }
+  function binaKumpulan(k, fail, terbuka, ada_cari) {
+    const id = 'p-' + k.tajuk.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    const kepala = h('button', { class: 'g-head', type: 'button', 'aria-expanded': String(terbuka), 'aria-controls': id },
+      h('span', { class: 'tile', 'data-kat': k.kategori }, ikon(k.ikon, 22)),
+      h('span', {}, h('span', { class: 'g-title', text: k.tajuk }), k.keterangan ? h('span', { class: 'g-desc', text: k.keterangan }) : null),
+      h('span', { class: 'g-meta' }, h('span', { text: fail.length + ' fail' }), ikon('kanan', 18)));
+    const baris = [h('li', {}, h('a', { class: 'file buka', href: urlSelamat(k.url), target: '_blank', rel: 'noopener noreferrer' },
+      h('span', { class: 'badge buka' }, ikon('folder', 16)), h('span', { text: 'Buka folder di Drive' }), h('span', { class: 'ext' }, ikon('luar', 16))))];
+    for (const [nama, url, jenis] of fail) {
+      const folder = String(jenis).toLowerCase() === 'folder';
+      baris.push(h('li', {}, h('a', { class: 'file', href: urlSelamat(url), target: '_blank', rel: 'noopener noreferrer' },
+        h('span', { class: 'badge ' + jenisKelas(jenis) }, folder ? ikon('folder', 16) : String(jenis || 'FAIL').toUpperCase().slice(0, 4)),
+        h('span', { text: nama }), h('span', { class: 'ext' }, ikon('luar', 16)))));
+    }
+    const panel = h('div', { class: 'panel', id }, h('div', { class: 'panel-in' }, h('ul', { class: 'files' }, baris)));
+    if (!terbuka) panel.setAttribute('inert', '');
+    const kad = h('article', { class: 'group' + (terbuka ? ' open' : '') }, kepala, panel);
+    kepala.addEventListener('click', () => {
+      if (ada_cari) return;
+      const buka = !kad.classList.contains('open');
+      kad.classList.toggle('open', buka); kepala.setAttribute('aria-expanded', String(buka));
+      if (buka) { panel.removeAttribute('inert'); state.buka.add(k.tajuk); } else { panel.setAttribute('inert', ''); state.buka.delete(k.tajuk); }
+    });
+    return kad;
+  }
+  function render() {
+    $('#banner').hidden = !(state.luarTalian && state.kumpulan.length);
+    const q = $('#cari').value.trim().toLocaleLowerCase('ms');
+    const hasil = [];
+    for (const k of state.kumpulan) {
+      if (state.filter !== 'semua' && k.kategori !== state.filter) continue;
+      let fail = k.fail, terbuka = state.buka.has(k.tajuk);
+      if (q) {
+        const tajukSama = (k.tajuk + ' ' + k.keterangan).toLocaleLowerCase('ms').includes(q);
+        const padan = k.fail.filter((f) => f[0].toLocaleLowerCase('ms').includes(q));
+        if (!tajukSama && !padan.length) continue;
+        if (!tajukSama) fail = padan;
+        terbuka = true;
       }
+      hasil.push(binaKumpulan(k, fail, terbuka, !!q));
+    }
+    const s = $('#senarai'); s.textContent = ''; s.append(...hasil);
+    const jumlah = state.kumpulan.length;
+    $('#bilangan').textContent = jumlah ? (hasil.length === jumlah ? jumlah + ' kategori' : hasil.length + ' daripada ' + jumlah + ' kategori') : '';
+    const kosong = $('#kosong'); kosong.textContent = '';
+    if (!hasil.length) {
+      kosong.hidden = false;
+      if (!jumlah && state.luarTalian) {
+        kosong.append(h('b', { text: 'Senarai tidak dapat dimuat.' }), h('span', { text: state.ralatMuat || '' }), h('div', { style: 'margin-top:14px' }, h('button', { class: 'btn quiet', type: 'button', onclick: () => muatSenarai() }, 'Cuba lagi')));
+      } else if (!jumlah) {
+        kosong.append(h('b', { text: 'Senarai masih kosong.' }), h('span', { text: 'Tambah baris dalam tab Pintasan pada Google Sheet untuk memaparkannya di sini.' }));
+      } else {
+        kosong.append(h('b', { text: 'Tiada padanan.' }), h('span', { text: q ? 'Tiada fail atau folder untuk "' + $('#cari').value.trim() + '". Cuba kata kunci lain.' : 'Tiada kategori dalam tapisan ini.' }));
+      }
+    } else kosong.hidden = true;
+    $('#nota').textContent = (state.kemaskini ? 'Dikemas kini ' + state.kemaskini + '. ' : '') + 'Pautan membuka Google Drive dan memerlukan sambungan internet.';
+  }
+  $('#cari').addEventListener('input', render);
+  $$('[data-tapis]').forEach((b) => b.addEventListener('click', () => {
+    state.filter = b.dataset.tapis;
+    $$('[data-tapis]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    render();
+  }));
+  $('#cubaLagi').addEventListener('click', () => muatSenarai());
 
-      search.addEventListener('input', render);
-      document.querySelectorAll('.chip').forEach((button) => button.addEventListener('click', () => {
-        selectedFilter = button.dataset.filter;
-        document.querySelectorAll('.chip').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-        render();
-      }));
+  /* ---------- Akaun ---------- */
+  $('#avatarBtn').addEventListener('click', () => {
+    const u = pengguna() || {};
+    $('#akaunNama').textContent = u.nama || ''; $('#akaunEmel').textContent = u.emel || '';
+    $('#avatarBesar').textContent = inisial(u.nama);
+    $('#akaunDlg').showModal();
+  });
+  $('#tutupAkaun').addEventListener('click', () => $('#akaunDlg').close());
+  $('#logKeluar').addEventListener('click', () => logKeluar('Anda sudah log keluar.'));
+  $('#muatSemula').addEventListener('click', async () => {
+    $('#akaunDlg').close(); await muatSenarai();
+    toast(state.luarTalian ? 'Tidak dapat memuat semula. Senarai simpanan dipaparkan.' : 'Senarai dikemas kini.');
+  });
+  for (const d of $$('dialog')) d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
 
-      let deferredPrompt;
-      const installButton = document.querySelector('#installButton');
-      window.addEventListener('beforeinstallprompt', (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-        installButton.classList.add('visible');
-      });
-      installButton.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        installButton.classList.remove('visible');
-      });
-      window.addEventListener('appinstalled', () => installButton.classList.remove('visible'));
-      if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-      render();
-    </script>
-  </body>
+  /* ---------- Tetapan sambungan ---------- */
+  function statusTetapan(teks, kelas) { const s = $('#tetapanStatus'); s.textContent = teks || ''; s.className = 'status' + (kelas ? ' ' + kelas : ''); }
+  $('#gearBtn').addEventListener('click', () => { $('#apiInput').value = apiUrl(); statusTetapan(''); $('#tetapanDlg').showModal(); });
+  $('#tutupTetapan').addEventListener('click', () => $('#tetapanDlg').close());
+  function alamatSah(v) { return /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(v) || /^https:\/\/script\.googleusercontent\.com\//.test(v); }
+  $('#formTetapan').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = $('#apiInput').value.trim();
+    if (!v) { LS.del('fd_api'); statusTetapan('Alamat dipadam.', 'ok'); }
+    else if (!alamatSah(v)) return statusTetapan('Alamat tidak sah. Ia mesti bermula dengan https://script.google.com/macros/s/ dan berakhir dengan /exec.', 'ralat');
+    else { LS.set('fd_api', v); statusTetapan('Alamat disimpan.', 'ok'); }
+    $('#apiNote').hidden = !apiUrl();
+    setTimeout(() => $('#tetapanDlg').close(), 500);
+  });
+  $('#ujiApi').addEventListener('click', async () => {
+    const v = $('#apiInput').value.trim();
+    if (!alamatSah(v)) return statusTetapan('Tampal alamat yang sah dahulu.', 'ralat');
+    statusTetapan('Menguji sambungan...');
+    try { const r = await (await fetch(v)).json(); statusTetapan(r && r.ok ? 'Sambungan berjaya. Tekan Simpan.' : 'Pelayan menjawab tetapi tidak dikenali.', r && r.ok ? 'ok' : 'ralat'); }
+    catch (err) { statusTetapan('Tidak dapat disambung. Semak alamat dan pastikan akses web app ditetapkan kepada "Anyone".', 'ralat'); }
+  });
+
+  /* ---------- Mula ---------- */
+  function mulaApp(baharu) {
+    tunjukApp(); window.scrollTo(0, 0);
+    if (!baharu || !state.kumpulan.length) muatCache();
+    render(); muatSenarai();
+  }
+  new IntersectionObserver(([e]) => $('#bar').classList.toggle('compact', !e.isIntersecting), { rootMargin: '-56px 0px 0px 0px' }).observe($('#judul'));
+  $$('[data-ikon]').forEach((el) => el.append(ikon(el.dataset.ikon, Number(el.dataset.saiz) || 20)));
+
+  if (LS.get('fd_token')) mulaApp(false); else tunjukAuth();
+  if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+</script>
+</body>
 </html>
