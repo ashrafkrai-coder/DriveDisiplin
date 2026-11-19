@@ -12,7 +12,9 @@
 
 var TAB_AKAUN = 'Akaun';
 var TAB_PINTASAN = 'Pintasan';
-var TAJUK_AKAUN = ['ID', 'Nama', 'Emel', 'Hash', 'Salt', 'Status', 'Dicipta', 'Log masuk terakhir'];
+var TAJUK_AKAUN = ['ID', 'Nama', 'Emel', 'Hash', 'Salt', 'Status', 'Dicipta', 'Log masuk terakhir', 'Foto'];
+var LAJUR_FOTO = 9;
+var HAD_FOTO = 45000; // had sel Google Sheet ialah 50,000 aksara
 var SESI_HARI = 30;
 var PUSINGAN_HASH = 500;
 var HAD_GAGAL = 5;
@@ -32,6 +34,7 @@ function doPost(e) {
       case 'masuk': return json_(masuk_(data));
       case 'sesi': return json_(sesi_(data));
       case 'pintasan': return json_(pintasan_(data));
+      case 'foto': return json_(foto_(data));
       default: return json_(gagal_('Permintaan tidak dikenali.'));
     }
   } catch (err) {
@@ -70,7 +73,7 @@ function daftar_(d) {
   } finally {
     kunci.releaseLock();
   }
-  return { ok: true, token: cipta_(emel), nama: nama, emel: emel };
+  return { ok: true, token: cipta_(emel), nama: nama, emel: emel, foto: '' };
 }
 
 function masuk_(d) {
@@ -96,13 +99,29 @@ function masuk_(d) {
 
   cache.remove(kunciGagal);
   lembaranAkaun_().getRange(akaun.baris, 8).setValue(new Date());
-  return { ok: true, token: cipta_(akaun.emel), nama: akaun.nama, emel: akaun.emel };
+  return { ok: true, token: cipta_(akaun.emel), nama: akaun.nama, emel: akaun.emel, foto: fotoAkaun_(akaun.baris) };
 }
 
 function sesi_(d) {
   var akaun = semakToken_(d.token);
   if (!akaun) return { ok: false, tamat: true, mesej: 'Sesi tamat. Log masuk semula.' };
-  return { ok: true, nama: akaun.nama, emel: akaun.emel };
+  return { ok: true, nama: akaun.nama, emel: akaun.emel, foto: fotoAkaun_(akaun.baris) };
+}
+
+/** Simpan atau buang foto profil. Foto dihantar sebagai data URL JPEG yang sudah dikecilkan oleh PWA. */
+function foto_(d) {
+  var akaun = semakToken_(d.token);
+  if (!akaun) return { ok: false, tamat: true, mesej: 'Sesi tamat. Log masuk semula.' };
+
+  var foto = String(d.foto || '');
+  if (foto && (foto.length > HAD_FOTO || !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+=*$/.test(foto))) {
+    return gagal_('Foto tidak sah atau terlalu besar.');
+  }
+
+  var sh = lembaranAkaun_();
+  if (!sh.getRange(1, LAJUR_FOTO).getValue()) sh.getRange(1, LAJUR_FOTO).setValue('Foto').setFontWeight('bold');
+  sh.getRange(akaun.baris, LAJUR_FOTO).setValue(foto);
+  return { ok: true, foto: foto };
 }
 
 function pintasan_(d) {
@@ -174,6 +193,12 @@ function cariAkaun_(emel) {
     }
   }
   return null;
+}
+
+/** Foto dibaca berasingan supaya cariAkaun_ tidak memuat semua foto setiap kali. */
+function fotoAkaun_(baris) {
+  if (lembaranAkaun_().getLastColumn() < LAJUR_FOTO) return '';
+  return String(lembaranAkaun_().getRange(baris, LAJUR_FOTO).getValue() || '');
 }
 
 function normalEmel_(v) {
